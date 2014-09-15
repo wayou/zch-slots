@@ -1,5 +1,6 @@
 var Slots = (function() {
     //the main slot class
+    
     return {
         init: function() {
             //initialize all stuff
