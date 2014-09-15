@@ -6,6 +6,6 @@ var Slots = (function() {
             console.info('game initalized!');
         }
     };
-});
+})();
 
 Slots.init();
