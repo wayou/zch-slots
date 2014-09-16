@@ -8,7 +8,6 @@
  **/
 
 //the main slot class
-
 var Slots = (function() {
     var WINDOW_WIDTH = window.innerWidth,
         WINDOW_HEIGHT = window.innerHeight,
@@ -29,7 +28,8 @@ var Slots = (function() {
             //set canvas size
             ctx.canvas.width = realBodyImageWidth,
             ctx.canvas.height = realBodyImageHeight;
-        }
+        },
+        spin:function()
     };
 })();
 
