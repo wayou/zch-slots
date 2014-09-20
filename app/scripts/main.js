@@ -21,7 +21,7 @@
 
 // MIT license
 
-(function(){
+(function() {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -99,9 +99,6 @@ Slots.prototype = {
     //initialize all stuff
     init: function() {
         var that = this;
-
-        //show the loading panel
-        $('#loading-wrapper').css('height', this.WINDOW_HEIGHT);
 
         // initilaixe the wheel
         this.wheel = {
@@ -231,22 +228,38 @@ Slots.prototype = {
         //sart the game
         var canvas = entry.canvas,
             ctx = this.ctx,
-            wheel = entry.wheel;
+            wheel = entry.wheel,
+            itemWidth = wheel.itemWidth,
+            itemHeight = wheel.itemHeight,
+            colWidth = wheel.width,
+            x = 0,
+            y = 0,
+            icons = entry.items.icons;
         //clear the canvas
         canvas.width = canvas.width;
+        console.dir(entry.layout);
 
         function refresh() {
-            var layout = entry.layout,
-                icons = entry.items.icons;
+            var layout = entry.layout;
             layout.forEach(function(v, i, a) {
-                ctx.drawImage(icons[v] || new Image(), 0, 0, wheel.itemWidth, wheel.itemHeight);
+                //we get 3 items per col
+                if ((i + 1) % 3 == 0) {
+                    x += wheel.gutter + colWidth;
+                    y = 0;
+                }
+                ctx.drawImage(icons[v] || new Image(), x, y, itemWidth, itemHeight);
+                y += itemHeight;
+                if (i == 14) {
+                    x = 0;
+                }
             });
             requestAnimationFrame(refresh);
         }
         requestAnimationFrame(refresh);
     }
 };
-
+//show the loading panel
+$('#loading-wrapper').css('height', window.innerHeight);
 //invoke our game
 $(function() {
     var zchSlots = new Slots();
