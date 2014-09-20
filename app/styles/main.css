@@ -24,8 +24,11 @@ body {
 
 /*end responsive canvas*/
 
-.placehoder-top {
-    height: 180px;
+.top-menu {
+    height: 50px;
+}
+.score-info {
+    height: 150px;
 }
 .machine {
     text-align: center;
@@ -36,25 +39,24 @@ img.slots-body {
     position: relative;
     z-index: 2;
 }
-img.slots-handler {
-    z-index: 1;
-    position: absolute;
-    top: 94px;
-    width: 13px;
-    right: 20px;
-    height: 95px;
-}
-img.slots-spin-btn {
-    z-index: 2;
-    position: absolute;
-    top: 50px;
-    right: 2px;
-    width: 48px;
-}
 #canvas {
     width: 100%;
     background-color: #ddd;
     position: absolute;
     top: 0;
     left: 0;
+}
+/*spin btn*/
+
+#spinBtn {
+    position: absolute;
+    right: 0;
+    top: 45%;
+    z-index: 2;
+}
+#spinBtn img {
+    width: 50px;
+}
+.panel-info {
+    height: 100px;
 }
