@@ -33,6 +33,9 @@ var Slots = function() {
     this.canvas = null;
     this.ctx = null;
     this.$spinBtn = $('#spinBtn');
+    this.$mkBetBtn = $('#mkBet');
+    this.$betLineBtn = $('#betLine');
+    this.$totalBet = $('#totalBet');
     this.GAME_STATUS = 0; // 0 stopped, 1 running, 2 result loaded
     this.score = 0;
     this.ITEM_CNT = 10; //how many icons in this game
@@ -48,9 +51,11 @@ var Slots = function() {
     };
     this.game = {
         bet: 1000, //1000 per line
-        lineCnt: 1
+        lineCnt: 1,
+        betRate: 1000
     };
     this.wheel = null;
+    this.layout = []; // 15items each range from 1~10, and item 0~2 represent the first column
 };
 
 Slots.prototype = {
@@ -77,6 +82,9 @@ Slots.prototype = {
         //load icons
         this.loadResource(that);
 
+        //generate a random layout for icons
+        this.getRandomLayout(that);
+
         //load user data
         this.getUserData(that);
 
@@ -88,6 +96,26 @@ Slots.prototype = {
                 that.spin(that);
             }
         });
+        this.$mkBetBtn.on('tap click', function() {
+            this.value = that.game.betRate + (+this.value);
+            that.game.bet = this.value;
+            that.$totalBet.text(that.game.bet * that.game.lineCnt);
+        });
+        this.$betLineBtn.on('tap click', function() {
+            if (this.value < 9) {
+                +this.value++;
+            } else {
+                this.value = 1;
+            }
+            that.game.lineCnt = this.value;
+            that.$totalBet.text(that.game.bet * that.game.lineCnt);
+        });
+    },
+    getRandomLayout: function(entry) {
+        entry.layout = [];
+        for (var i = 14; i >= 0; i--) {
+            entry.layout.push(~~(Math.random() * (entry.ITEM_CNT) + 1))
+        };
     },
     initCanvas: function(entry) {
         $("#canvas").attr({
