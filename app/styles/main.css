@@ -24,6 +24,20 @@ body {
 
 /*end responsive canvas*/
 
+#loading-wrapper {
+    background-color: #15A3D5;
+    text-align: center;
+    z-index: 3;
+    position: absolute;
+    width:100%;
+}
+.loading-text{
+    color:#fff;
+    position: relative;
+    top: 50%;
+    font-size: 1.2em;
+    font-weight: bold;
+}
 .top-menu {
     height: 50px;
 }
@@ -40,7 +54,7 @@ img.slots-body {
     z-index: 2;
 }
 #canvas {
-    background-color:#15A3D5;
+    background-color: #15A3D5;
     position: absolute;
 }
 /*spin btn*/

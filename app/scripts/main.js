@@ -11,32 +11,36 @@
  *wheelCanvasWidth 540-85=455
  **/
 
- // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+
+//the following is a polyfill of the requestAnimationFrame I copied from Paul Irish's gist
+
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
- 
+
 // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
- 
+
 // MIT license
- 
-(function() {
+
+(function(){
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
-                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
- 
+
     if (!window.requestAnimationFrame)
         window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
-              timeToCall);
+            var id = window.setTimeout(function() {
+                    callback(currTime + timeToCall);
+                },
+                timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
- 
+
     if (!window.cancelAnimationFrame)
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
@@ -95,6 +99,9 @@ Slots.prototype = {
     //initialize all stuff
     init: function() {
         var that = this;
+
+        //show the loading panel
+        $('#loading-wrapper').css('height', this.WINDOW_HEIGHT);
 
         // initilaixe the wheel
         this.wheel = {
@@ -178,6 +185,12 @@ Slots.prototype = {
             entry.items.icons[i] = new Image();
             entry.items.icons[i].onload = function() {
                 entry.items.readyCnt++;
+                if (entry.items.readyCnt == entry.ITEM_CNT) {
+                    //all images are ready, show the UI
+                    $('#loading-wrapper').css({
+                        display: 'none'
+                    });
+                }
             };
             entry.items.icons[i].src = 'images/items/' + i + '.png';
         }
@@ -208,9 +221,10 @@ Slots.prototype = {
         //     //here we get the lines and combos result, and draw them out
         // })
 
-
-        //start the animation
-        //
+        //lock, mock layout data
+        setTimeout(function() {
+            entry.layout = [];
+        }, 2000);
     },
     run: function(entry) {
         // , this.canvas, this.ctx, this.layout, this.wheel, that.items.icons
@@ -219,18 +233,14 @@ Slots.prototype = {
             ctx = this.ctx,
             wheel = entry.wheel;
         //clear the canvas
-        canvas.wdith = canvas.wdith;
-        // layout.forEach(function(v, i, a) {
-        //     //ctx.drawImage(icons[v],0,0,wheel.itemWidth,wheel.itemHeight);
-        //     ctx.drawImage(icons[v],100,100,200,200);
-        // });
+        canvas.width = canvas.width;
+
         function refresh() {
             var layout = entry.layout,
                 icons = entry.items.icons;
-            ctx.drawImage(icons[1] || new Image(), 0, 0, wheel.itemWidth, wheel.itemHeight);
-            // if (entry.items.readyCnt == entry.ITEM_CNT) {
-            //     ctx.drawImage(icons[1]||new Image(), 0, 0, wheel.itemWidth, wheel.itemHeight);
-            // }
+            layout.forEach(function(v, i, a) {
+                ctx.drawImage(icons[v] || new Image(), 0, 0, wheel.itemWidth, wheel.itemHeight);
+            });
             requestAnimationFrame(refresh);
         }
         requestAnimationFrame(refresh);
