@@ -74,8 +74,8 @@ Slots.prototype = {
             canvasWidth: ~~(455 * that.ratio),
             canvasHeight: ~~(240 * that.ratio),
             itemWidth: ~~(that.itemSize.width * that.ratio),
-            itemheight: (~~that.itemSize.height * that.ratio)
-        }
+            itemHeight: (~~that.itemSize.height * that.ratio)
+        };
         //position the spin button
         this.$spinBtn.find('img').css('width', ~~ (this.ratio * this.spinImagesSize.width));
 
@@ -92,14 +92,14 @@ Slots.prototype = {
         this.getUserData(that);
 
         //draw default layout
-        this.drawIcons(this.canvas, this.ctx, this.layout, this.wheel, that.items.icons);
+        this.run(that);
 
         // listen the spin button 
         this.$spinBtn.on('tap click', function() {
             if (that.checkValidation) {
                 //here we go 
                 console.info('game start!');
-                that.spin(that);
+                that.run(that);
             }
         });
         this.$mkBetBtn.on('tap click', function() {
@@ -144,10 +144,10 @@ Slots.prototype = {
     loadResource: function(entry) {
         for (var i = entry.ITEM_CNT; i > 0; i--) {
             entry.items.icons[i] = new Image();
-            entry.items.icons[i].src = 'images/items/' + i + '.png';
             entry.items.icons[i].onload = function() {
                 entry.items.readyCnt++;
             };
+            entry.items.icons[i].src = 'images/items/' + i + '.png';
         }
     },
     getUserData: function(entry) {
@@ -163,6 +163,7 @@ Slots.prototype = {
         entry.user.user_info_ready = true;
     },
     spin: function(entry) {
+        //here we send request and update the data
         entry.GAME_STATUS = 1;
 
         //send the bet info the server and start the animation while waiting the result from the server
@@ -179,13 +180,28 @@ Slots.prototype = {
         //start the animation
         //
     },
-    drawIcons: function(canvas, ctx, layout, wheel, icons) {
+    run: function(entry) {
+        // , this.canvas, this.ctx, this.layout, this.wheel, that.items.icons
+        //sart the game
+        var canvas = entry.canvas,
+            ctx = this.ctx,
+            wheel = entry.wheel;
         //clear the canvas
-       // canvas.wdith = canvas.wdith;
-        layout.forEach(function(v, i, a) {
-            //ctx.drawImage(icons[v],0,0,wheel.itemWidth,wheel.itemHeight);
-            ctx.drawImage(icons[v],100,100,200,200);
-        });
+        canvas.wdith = canvas.wdith;
+        // layout.forEach(function(v, i, a) {
+        //     //ctx.drawImage(icons[v],0,0,wheel.itemWidth,wheel.itemHeight);
+        //     ctx.drawImage(icons[v],100,100,200,200);
+        // });
+        function refresh() {
+            var layout = entry.layout,
+                icons = entry.items.icons;
+            ctx.drawImage(icons[1] || new Image(), 0, 0, wheel.itemWidth, wheel.itemHeight);
+            // if (entry.items.readyCnt == entry.ITEM_CNT) {
+            //     ctx.drawImage(icons[1]||new Image(), 0, 0, wheel.itemWidth, wheel.itemHeight);
+            // }
+            requestAnimationFrame(refresh);
+        }
+        requestAnimationFrame(refresh);
     }
 };
 
