@@ -11,6 +11,8 @@
  *wheelCanvasWidth 540-85=455
  **/
 
+//display the splash screen
+$('#loading-wrapper').height(window.innerHeight);
 
 //the following is a polyfill of the requestAnimationFrame I copied from Paul Irish's gist
 
@@ -122,7 +124,7 @@ Slots.prototype = {
         this.loadResource(that);
 
         //generate a random layout for icons
-        this.getRandomLayout(that);
+        this.layout = this.getRandomLayout(that);
 
         //load user data
         this.getUserData(that);
@@ -135,7 +137,7 @@ Slots.prototype = {
             if (that.checkValidation) {
                 //here we go 
                 console.info('game start!');
-                that.run(that);
+                that.spin(that);
             }
         });
         this.$mkBetBtn.on('tap click', function() {
@@ -154,10 +156,11 @@ Slots.prototype = {
         });
     },
     getRandomLayout: function(entry) {
-        entry.layout = [];
+        var layout = [];
         for (var i = 14; i >= 0; i--) {
-            entry.layout.push(~~(Math.random() * (entry.ITEM_CNT) + 1))
+            layout.push(~~(Math.random() * (entry.ITEM_CNT) + 1))
         };
+        return layout;
     },
     initCanvas: function(entry) {
         $("#canvas").attr({
@@ -220,7 +223,7 @@ Slots.prototype = {
 
         //lock, mock layout data
         setTimeout(function() {
-            entry.layout = [];
+            entry.layout = entry.getRandomLayout(entry);
         }, 2000);
     },
     run: function(entry) {
@@ -235,15 +238,13 @@ Slots.prototype = {
             x = 0,
             y = 0,
             icons = entry.items.icons;
-        //clear the canvas
-        canvas.width = canvas.width;
-        console.dir(entry.layout);
 
         function refresh() {
-            var layout = entry.layout;
-            layout.forEach(function(v, i, a) {
+            //clear the canvas
+            canvas.width = canvas.width;
+            entry.layout.forEach(function(v, i, a) {
                 //we get 3 items per col
-                if ((i + 1) % 3 == 0) {
+                if ((i != 0) && (i % 3 == 0)) {
                     x += wheel.gutter + colWidth;
                     y = 0;
                 }
@@ -251,6 +252,7 @@ Slots.prototype = {
                 y += itemHeight;
                 if (i == 14) {
                     x = 0;
+                    y = 0;
                 }
             });
             requestAnimationFrame(refresh);
@@ -258,8 +260,7 @@ Slots.prototype = {
         requestAnimationFrame(refresh);
     }
 };
-//show the loading panel
-$('#loading-wrapper').css('height', window.innerHeight);
+
 //invoke our game
 $(function() {
     var zchSlots = new Slots();
