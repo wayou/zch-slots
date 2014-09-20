@@ -23,15 +23,16 @@ var Slots = function() {
         width: 96,
         height: 96
     };
-
+    this.itemSize = {
+        width: 84,
+        height: 84
+    };
     this.realBodyImageWidth = ~~this.WINDOW_WIDTH;
     this.ratio = this.realBodyImageWidth / this.bodyImagesSize.width; //the ratio of the image on the screen relative to the orignal image size
 
     this.canvas = $('#canvas')[0];
     this.ctx = this.canvas.getContext('2d');
     this.realBodyImageHeight = ~~ (this.ratio * this.bodyImagesSize.height);
-    this.canvas = null;
-    this.ctx = null;
     this.$spinBtn = $('#spinBtn');
     this.$mkBetBtn = $('#mkBet');
     this.$betLineBtn = $('#betLine');
@@ -71,7 +72,9 @@ Slots.prototype = {
             height: ~~(240 * that.ratio),
             gutter: ~~(5 * that.ratio),
             canvasWidth: ~~(455 * that.ratio),
-            canvasHeight: ~~(240 * that.ratio)
+            canvasHeight: ~~(240 * that.ratio),
+            itemWidth: ~~(that.itemSize.width * that.ratio),
+            itemheight: (~~that.itemSize.height * that.ratio)
         }
         //position the spin button
         this.$spinBtn.find('img').css('width', ~~ (this.ratio * this.spinImagesSize.width));
@@ -87,6 +90,9 @@ Slots.prototype = {
 
         //load user data
         this.getUserData(that);
+
+        //draw default layout
+        this.drawIcons(this.canvas, this.ctx, this.layout, this.wheel, that.items.icons);
 
         // listen the spin button 
         this.$spinBtn.on('tap click', function() {
@@ -171,10 +177,15 @@ Slots.prototype = {
 
 
         //start the animation
-
+        //
     },
-    drawIcons: function(canvas, layout /*an array specify the layout of the icons*/ ) {
-
+    drawIcons: function(canvas, ctx, layout, wheel, icons) {
+        //clear the canvas
+       // canvas.wdith = canvas.wdith;
+        layout.forEach(function(v, i, a) {
+            //ctx.drawImage(icons[v],0,0,wheel.itemWidth,wheel.itemHeight);
+            ctx.drawImage(icons[v],100,100,200,200);
+        });
     }
 };
 
