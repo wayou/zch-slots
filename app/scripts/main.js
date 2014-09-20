@@ -25,16 +25,26 @@ var Slots = function() {
     this.canvas = $('#canvas')[0];
     this.ctx = canvas.getContext("2d");
     this.$spinBtn = $('#spinBtn');
+    this.GAME_STATUS = 0; //0 stop, 1 running
 };
 
 Slots.prototype = {
+    //initialize all stuff
     init: function() {
-        //initialize all stuff
+        var that = this;
         //set canvas size
         this.ctx.canvas.width = this.realBodyImageWidth;
         this.ctx.canvas.height = this.realBodyImageHeight;
         //position the spin button
         this.$spinBtn.find('img').css('width', ~~ (this.ratio * this.spinImagesSize.width));
+
+        // listen the spin button 
+        $('#spinBtn').on('tap click', function() {
+            if (that.GAME_STATUS == 1) {
+                return;
+            }
+            alert('game started!');
+        });
     },
     spin: function() {
         //
