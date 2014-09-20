@@ -40,11 +40,8 @@ img.slots-body {
     z-index: 2;
 }
 #canvas {
-    width: 100%;
-    background-color: #ddd;
+    background-color:#15A3D5;
     position: absolute;
-    top: 0;
-    left: 0;
 }
 /*spin btn*/
 
