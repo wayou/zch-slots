@@ -96,6 +96,7 @@ var Slots = function() {
     };
     this.wheel = null;
     this.layout = []; // 15items each range from 1~10, and item 0~2 represent the first column
+    this.linesInfo = [0,0,0,0,0,0,0,0,0]; // the result for each line
     this.defaultPos = []; //the default position for each icon on the canvas
     this.snds = [];
 };
@@ -268,6 +269,7 @@ Slots.prototype = {
         setTimeout(function() {
             entry.GAME_STATUS = 2;
             entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
+            entry.linesInfo = [3,3,3,0,0,0,0,0,0];
         }, 2000);
     },
     run: function(entry) {
@@ -328,9 +330,9 @@ Slots.prototype = {
 };
 
 var SlotsSnds = {
-    win: new Audio('../sounds/slots_win_fruit_00.mp3'),
-    background: new Audio('../sounds/background.mp3'),
-    btn: new Audio('../sounds/ui_Buttons.mp3')
+    win: new Audio('sounds/slots_win_fruit_00.mp3'),
+    background: new Audio('sounds/background.mp3'),
+    btn: new Audio('sounds/ui_Buttons.mp3')
 };
 
 //invoke our game
