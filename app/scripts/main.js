@@ -97,6 +97,7 @@ var Slots = function() {
     this.wheel = null;
     this.layout = []; // 15items each range from 1~10, and item 0~2 represent the first column
     this.defaultPos = []; //the default position for each icon on the canvas
+    this.snds = [];
 };
 
 Slots.prototype = {
@@ -132,14 +133,9 @@ Slots.prototype = {
                     y: y
                 });
                 y += that.wheel.itemHeight;
-                // if (i == 14) {
-                //     x = 0;
-                //     y = 0;
-                // }
             }
             return pos;
         })();
-
 
         //position the spin button
         this.$spinBtn.find('img').css('width', ~~ (this.ratio * this.spinImagesSize.width));
@@ -147,7 +143,7 @@ Slots.prototype = {
         //initialize the canvas
         this.initCanvas(that);
 
-        //load icons
+        //load icons & sounds
         this.loadResource(that);
 
         //generate a random layout for icons
@@ -161,9 +157,23 @@ Slots.prototype = {
 
         // listen the spin button 
         this.$spinBtn.on('tap click', function() {
+            try {
+                //play the button sound
+                SlotsSnds.btn.currentTime = 0;
+                SlotsSnds.btn.play();
+            } catch (err) {};
+
             if (that.checkValidation(that)) {
                 //here we go 
                 console.info('game start!');
+                try {
+                    //play the button sound
+                    SlotsSnds.btn.currentTime = 0;
+                    SlotsSnds.btn.play();
+                    //play the background sound
+                    SlotsSnds.background.currentTime = 0;
+                    SlotsSnds.background.play();
+                } catch (err) {};
                 that.spin(that);
             } else {
                 console.log('game is running');
@@ -296,6 +306,16 @@ Slots.prototype = {
                     //the result loaded, lets speed down and draw the final layout
                     //if all icons are in the right position ,stop the animation 
                     entry.GAME_STATUS = 0;
+                    try {
+                        //stop the background sound
+                        SlotsSnds.background.pause();
+                        //and if wins, play the win sound
+                        //todo
+                        SlotsSnds.win.currentTime=0;
+                        SlotsSnds.win.play();
+                        
+                    } catch (err) {};
+
                     pos = JSON.parse(JSON.stringify(entry.defaultPos));
                 }
 
@@ -305,6 +325,12 @@ Slots.prototype = {
         }
         requestAnimationFrame(refresh);
     }
+};
+
+var SlotsSnds = {
+    win: new Audio('../sounds/slots_win_fruit_00.mp3'),
+    background: new Audio('../sounds/background.mp3'),
+    btn: new Audio('../sounds/ui_Buttons.mp3')
 };
 
 //invoke our game
