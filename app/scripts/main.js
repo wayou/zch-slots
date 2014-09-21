@@ -81,8 +81,9 @@ var Slots = function() {
     this.ITEM_CNT = 10; //how many icons in this game
     this.user = {
         uid: 0,
-        user_name: 0,
-        wealth: 0, //得分
+        user_name: '未知',
+        avatar: 'images/default_avatar.jpg',
+        wealth: 0,
         user_info_ready: false
     };
     this.items = {
@@ -96,7 +97,7 @@ var Slots = function() {
     };
     this.wheel = null;
     this.layout = []; // 15items each range from 1~10, and item 0~2 represent the first column
-    this.linesInfo = [0,0,0,0,0,0,0,0,0]; // the result for each line
+    this.linesInfo = [0, 0, 0, 0, 0, 0, 0, 0, 0]; // the result for each line
     this.defaultPos = []; //the default position for each icon on the canvas
     this.snds = [];
 };
@@ -236,16 +237,51 @@ Slots.prototype = {
         }
     },
     getUserData: function(entry) {
-        //get user info from server
-        // $.getJSON('/userinfo', function(data) {
+
+        //get user info from URL
+        var params = entry.getQueryString();
+
+        //when this works remove the default values 
+        entry.user.uid = params.uid || 1009;
+        entry.user.nick_name = params.nick_name || 'Atom';
+        entry.user.avatar = params.avatar || 'images/sample_avatar.jpg';
+
+        //get inital wealth info from server
+        // $.getJSON('/userinfo', {
+        //     uid: userInfo.uid,
+        //     uid: userInfo.nick_name,
+        //     uid: userInfo.avatar
+        // }, function(data) {
         //     //set the user info
-        //     // entry.user.wealth = data.wealth;
-        //     // entry.user.user_info_ready = true;
+        //     entry.user.wealth = data.wealth;
+        //     entry.user.user_info_ready = true;
         // });
 
         //lock
         entry.user.wealth = 10000;
         entry.user.user_info_ready = true;
+    },
+    getQueryString: function() {
+        //helper function to get query parameters from url
+        //refernce:http://stackoverflow.com/questions/979975/how-to-get-the-value-from-url-parameter
+        var query_string = {};
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            // If first entry with this name
+            if (typeof query_string[pair[0]] === "undefined") {
+                query_string[pair[0]] = pair[1];
+                // If second entry with this name
+            } else if (typeof query_string[pair[0]] === "string") {
+                var arr = [query_string[pair[0]], pair[1]];
+                query_string[pair[0]] = arr;
+                // If third or later entry with this name
+            } else {
+                query_string[pair[0]].push(pair[1]);
+            }
+        }
+        return query_string;
     },
     spin: function(entry) {
         //here we send request and update the data
@@ -253,8 +289,9 @@ Slots.prototype = {
 
         //lock
         //each time start from a random layout
-        entry.layout = entry.getRandomLayout(entry);
+        //entry.layout = entry.getRandomLayout(entry);
 
+        //unlock
         //send the bet info the server and start the animation while waiting the result from the server
         // $.post('/bet', {
         //     uid: 001,
@@ -268,8 +305,9 @@ Slots.prototype = {
         //lock, mock layout data
         setTimeout(function() {
             entry.GAME_STATUS = 2;
-            entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
-            entry.linesInfo = [3,3,3,0,0,0,0,0,0];
+            // entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
+             entry.layout =entry.getRandomLayout(entry);
+            entry.linesInfo = [3, 3, 3, 0, 0, 0, 0, 0, 0];
         }, 2000);
     },
     run: function(entry) {
@@ -286,7 +324,8 @@ Slots.prototype = {
             icons = entry.items.icons,
             //duplicate the default positons
             pos = JSON.parse(JSON.stringify(entry.defaultPos)),
-            speed = 10; //for now lets get the speed being constant
+            speed = 0, //for now lets get the speed being constant
+            MAX_SPEED = 20;
 
         function refresh() {
             //clear the canvas
@@ -300,27 +339,34 @@ Slots.prototype = {
                 if (entry.GAME_STATUS == 1) {
                     //spin up
                     pos[i].y += speed;
-                    if (pos[i].y > wheel.height) {
-                        pos[i].y = 0;
+
+                    if (speed < MAX_SPEED) {
+                        speed += 0.01;
                     }
                 } else if (entry.GAME_STATUS == 2) {
-                    //spin down
                     //the result loaded, lets speed down and draw the final layout
                     //if all icons are in the right position ,stop the animation 
-                    entry.GAME_STATUS = 0;
-                    try {
-                        //stop the background sound
-                        SlotsSnds.background.pause();
-                        //and if wins, play the win sound
-                        //todo
-                        SlotsSnds.win.currentTime=0;
-                        SlotsSnds.win.play();
-                        
-                    } catch (err) {};
+                    //spin down
+                    pos[i].y += speed;
 
-                    pos = JSON.parse(JSON.stringify(entry.defaultPos));
+                    if (speed > 0) {
+                        speed -= 0.01;
+                    } else {
+                        speed = 0;
+                        entry.GAME_STATUS = 0;
+                        try {
+                            //stop the background sound
+                            SlotsSnds.background.pause();
+                            //and if wins, play the win sound
+                            SlotsSnds.win.currentTime = 0;
+                            SlotsSnds.win.play();
+                        } catch (err) {};
+                        pos = JSON.parse(JSON.stringify(entry.defaultPos));
+                    }
                 }
-
+                if (pos[i].y > wheel.height) {
+                    pos[i].y = -wheel.itemHeight;
+                }
                 ctx.drawImage(icons[v] || new Image(), pos[i].x, pos[i].y, itemWidth, itemHeight);
             });
             requestAnimationFrame(refresh);
