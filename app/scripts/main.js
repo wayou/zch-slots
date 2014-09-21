@@ -306,7 +306,7 @@ Slots.prototype = {
         setTimeout(function() {
             entry.GAME_STATUS = 2;
             // entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
-             entry.layout =entry.getRandomLayout(entry);
+            entry.layout = entry.getRandomLayout(entry);
             entry.linesInfo = [3, 3, 3, 0, 0, 0, 0, 0, 0];
         }, 2000);
     },
@@ -348,6 +348,21 @@ Slots.prototype = {
                     //if all icons are in the right position ,stop the animation 
                     //spin down
                     pos[i].y += speed;
+
+                    // if (pos[i].y == entry.defaultPos[i].y) {
+                    //     speed = 0;
+                    //     entry.GAME_STATUS = 0;
+                    //     try {
+                    //         //stop the background sound
+                    //         SlotsSnds.background.pause();
+                    //         //and if wins, play the win sound
+                    //         SlotsSnds.win.currentTime = 0;
+                    //         SlotsSnds.win.play();
+                    //     } catch (err) {};
+                    //     pos = JSON.parse(JSON.stringify(entry.defaultPos));
+                    // } else {
+                    //     speed -= 0.01;
+                    // }
 
                     if (speed > 0) {
                         speed -= 0.01;
