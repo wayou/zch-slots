@@ -164,7 +164,7 @@ Slots.prototype = {
                 //here we go 
                 console.info('game start!');
                 that.spin(that);
-            }else{
+            } else {
                 console.log('game is running');
             }
         });
@@ -251,7 +251,7 @@ Slots.prototype = {
 
         //lock, mock layout data
         setTimeout(function() {
-            entry.GAME_STATUS = 0;
+            entry.GAME_STATUS = 2;
             entry.layout = entry.getRandomLayout(entry);
         }, 2000);
     },
@@ -266,13 +266,34 @@ Slots.prototype = {
             colWidth = wheel.width,
             x = 0,
             y = 0,
-            icons = entry.items.icons;
+            icons = entry.items.icons,
+            pos = entry.defaultPos,
+            speed=10;//for now lets get the speed being constant
 
         function refresh() {
             //clear the canvas
             canvas.width = canvas.width;
+
             entry.layout.forEach(function(v, i, a) {
-                ctx.drawImage(icons[v] || new Image(), entry.defaultPos[i].x, entry.defaultPos[i].y, itemWidth, itemHeight);
+                //update the position of each icon based on the game status
+                //stataus=1 spin up
+                //status=2 spin down
+                //status=0 to stop the animation
+                if (entry.GAME_STATUS == 1) {
+                    //spin up
+                    pos[i].y += speed;
+                    if(pos[i].y>wheel.height){
+                        pos[i].y=0;
+                    }
+                } else if (entry.GAME_STATUS == 2) {
+                    //the result loaded, lets speed down and draw the final layout
+                    
+                    //if all icons are in the right position ,stop the animation 
+                    entry.GAME_STATUS =0;
+                    pos=entry.defaultPos;
+                }
+
+                ctx.drawImage(icons[v] || new Image(), pos[i].x, pos[i].y, itemWidth, itemHeight);
             });
             requestAnimationFrame(refresh);
         }
