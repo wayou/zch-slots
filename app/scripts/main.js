@@ -12,7 +12,8 @@
  **/
 
 //display the splash screen
-$('#loading-wrapper').height(window.innerHeight);
+//to be remove
+// $('#loading-wrapper').height(window.innerHeight);
 
 //the following is a polyfill of the requestAnimationFrame I copied from Paul Irish's gist
 
@@ -239,6 +240,10 @@ Slots.prototype = {
         //here we send request and update the data
         entry.GAME_STATUS = 1;
 
+        //lock
+        //each time start from a random layout
+        entry.layout = entry.getRandomLayout(entry);
+
         //send the bet info the server and start the animation while waiting the result from the server
         // $.post('/bet', {
         //     uid: 001,
@@ -252,7 +257,7 @@ Slots.prototype = {
         //lock, mock layout data
         setTimeout(function() {
             entry.GAME_STATUS = 2;
-            entry.layout = entry.getRandomLayout(entry);
+            entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
         }, 2000);
     },
     run: function(entry) {
@@ -267,8 +272,9 @@ Slots.prototype = {
             x = 0,
             y = 0,
             icons = entry.items.icons,
-            pos = entry.defaultPos,
-            speed=10;//for now lets get the speed being constant
+            //duplicate the default positons
+            pos = JSON.parse(JSON.stringify(entry.defaultPos)),
+            speed = 10; //for now lets get the speed being constant
 
         function refresh() {
             //clear the canvas
@@ -282,15 +288,15 @@ Slots.prototype = {
                 if (entry.GAME_STATUS == 1) {
                     //spin up
                     pos[i].y += speed;
-                    if(pos[i].y>wheel.height){
-                        pos[i].y=0;
+                    if (pos[i].y > wheel.height) {
+                        pos[i].y = 0;
                     }
                 } else if (entry.GAME_STATUS == 2) {
+                    //spin down
                     //the result loaded, lets speed down and draw the final layout
-                    
                     //if all icons are in the right position ,stop the animation 
-                    entry.GAME_STATUS =0;
-                    pos=entry.defaultPos;
+                    entry.GAME_STATUS = 0;
+                    pos = JSON.parse(JSON.stringify(entry.defaultPos));
                 }
 
                 ctx.drawImage(icons[v] || new Image(), pos[i].x, pos[i].y, itemWidth, itemHeight);
