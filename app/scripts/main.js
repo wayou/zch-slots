@@ -95,6 +95,7 @@ var Slots = function() {
     };
     this.wheel = null;
     this.layout = []; // 15items each range from 1~10, and item 0~2 represent the first column
+    this.defaultPos = []; //the default position for each icon on the canvas
 };
 
 Slots.prototype = {
@@ -114,6 +115,31 @@ Slots.prototype = {
             itemWidth: ~~(that.itemSize.width * that.ratio),
             itemHeight: (~~that.itemSize.height * that.ratio)
         };
+        //initialize the default position, this will be updated when spin clicked to generate the animation
+        this.defaultPos = (function() {
+            var x = 0,
+                y = 0,
+                pos = [];
+            for (var i = 0; i < 15; i++) {
+                //we get 3 items per col
+                if ((i != 0) && (i % 3 == 0)) {
+                    x += that.wheel.gutter + that.wheel.width;
+                    y = 0;
+                }
+                pos.push({
+                    x: x,
+                    y: y
+                });
+                y += that.wheel.itemHeight;
+                // if (i == 14) {
+                //     x = 0;
+                //     y = 0;
+                // }
+            }
+            return pos;
+        })();
+
+
         //position the spin button
         this.$spinBtn.find('img').css('width', ~~ (this.ratio * this.spinImagesSize.width));
 
@@ -134,10 +160,12 @@ Slots.prototype = {
 
         // listen the spin button 
         this.$spinBtn.on('tap click', function() {
-            if (that.checkValidation) {
+            if (that.checkValidation(that)) {
                 //here we go 
                 console.info('game start!');
                 that.spin(that);
+            }else{
+                console.log('game is running');
             }
         });
         this.$mkBetBtn.on('tap click', function() {
@@ -158,7 +186,7 @@ Slots.prototype = {
     getRandomLayout: function(entry) {
         var layout = [];
         for (var i = 14; i >= 0; i--) {
-            layout.push(~~(Math.random() * (entry.ITEM_CNT) + 1))
+            layout.push(~~(Math.random() * (entry.ITEM_CNT) + 1));
         };
         return layout;
     },
@@ -223,6 +251,7 @@ Slots.prototype = {
 
         //lock, mock layout data
         setTimeout(function() {
+            entry.GAME_STATUS = 0;
             entry.layout = entry.getRandomLayout(entry);
         }, 2000);
     },
@@ -243,17 +272,7 @@ Slots.prototype = {
             //clear the canvas
             canvas.width = canvas.width;
             entry.layout.forEach(function(v, i, a) {
-                //we get 3 items per col
-                if ((i != 0) && (i % 3 == 0)) {
-                    x += wheel.gutter + colWidth;
-                    y = 0;
-                }
-                ctx.drawImage(icons[v] || new Image(), x, y, itemWidth, itemHeight);
-                y += itemHeight;
-                if (i == 14) {
-                    x = 0;
-                    y = 0;
-                }
+                ctx.drawImage(icons[v] || new Image(), entry.defaultPos[i].x, entry.defaultPos[i].y, itemWidth, itemHeight);
             });
             requestAnimationFrame(refresh);
         }
