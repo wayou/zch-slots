@@ -90,9 +90,9 @@ var Slots = function() {
         readyCnt: 0 //how many icons are loaded
     };
     this.game = {
-        bet: 1000, //1000 per line
+        bet: 1, //1000 per line
         lineCnt: 1,
-        betRate: 1000
+        betRate: 1
     };
     this.wheel = null;
     this.layout = []; // 15items each range from 1~10, and item 0~2 represent the first column
@@ -195,18 +195,28 @@ Slots.prototype = {
             }
         });
         this.$mkBetBtn.on('tap click', function() {
-            this.value = that.game.betRate + (+this.value);
-            that.game.bet = this.value;
-            that.$totalBet.text(that.game.bet * that.game.lineCnt);
+            var $cntHolder = $('#betPerLineCnt'),
+                originalCnt = +$cntHolder.text();
+            if (originalCnt < that.MAX_BET) {
+                originalCnt++;
+            } else {
+                originalCnt = 1;
+            }
+            $cntHolder.text(originalCnt);
+            that.game.bet = originalCnt;
+            that.$totalBet.text(originalCnt * (+$('#linesCnt').text()));
         });
         this.$betLineBtn.on('tap click', function() {
-            if (this.value < 9) {
-                +this.value++;
+            var $cntHolder = $('#linesCnt'),
+                originalCnt = +$cntHolder.text();
+            if (originalCnt < 9) {
+                originalCnt++;
             } else {
-                this.value = 1;
+                originalCnt = 1;
             }
-            that.game.lineCnt = this.value;
-            that.$totalBet.text(that.game.bet * that.game.lineCnt);
+            that.game.lineCnt = originalCnt;
+            $cntHolder.text(originalCnt);
+            that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
         });
     },
     getRandomLayout: function(entry) {
@@ -321,7 +331,7 @@ Slots.prototype = {
             // entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
             entry.layout = entry.getRandomLayout(entry);
             entry.linesInfo = [3, 3, 3, 0, 0, 0, 0, 0, 0];
-        }, 6000);
+        }, 8000);
     },
     run: function(entry) {
         // , this.canvas, this.ctx, this.layout, this.wheel, that.items.icons
@@ -337,8 +347,6 @@ Slots.prototype = {
             icons = entry.items.icons,
             //duplicate the default positons
             pos = JSON.parse(JSON.stringify(entry.defaultPos)),
-            //duplicate the default positons agin for another usage
-            defaultPos = JSON.parse(JSON.stringify(entry.defaultPos)),
             speed = [0, 0, 0, 0, 0], //for now lets get the speed being constant
             MAX_SPEED = 20;
 
@@ -352,10 +360,10 @@ Slots.prototype = {
                     //make the column speed up one by one
                     if (speed[i] < MAX_SPEED) {
                         if (i == 0) {
-                            speed[i] += 0.1;
+                            speed[i] += 0.5;
                         } else {
-                            if (speed[i - 1] > 2) {
-                                speed[i] += 0.1;
+                            if (speed[i - 1] > 10) {
+                                speed[i] += 0.5;
                             }
                         }
                     }
@@ -365,13 +373,13 @@ Slots.prototype = {
 
                 for (var i = 0; i < 5; i++) {
 
-                    if (pos[i * 3].y < (defaultPos[i * 3].y + 1) && pos[i * 3].y > (defaultPos[i * 3].y - 1)) {
+                    if (pos[i * 3].y < (entry.defaultPos[i * 3].y + 1) && pos[i * 3].y > (entry.defaultPos[i * 3].y - 1)) {
 
                         //the first icon is in position
                         speed[i] = 0;
-                        pos[i * 3 + 0] = JSON.parse(JSON.stringify(defaultPos[i * 3 + 0]));
-                        pos[i * 3 + 1] = JSON.parse(JSON.stringify(defaultPos[i * 3 + 1]));
-                        pos[i * 3 + 2] = JSON.parse(JSON.stringify(defaultPos[i * 3 + 2]));
+                        pos[i * 3 + 0] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 0]));
+                        pos[i * 3 + 1] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 1]));
+                        pos[i * 3 + 2] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 2]));
                         if (speed[4] == 0) {
                             entry.GAME_STATUS = 0;
                             try {

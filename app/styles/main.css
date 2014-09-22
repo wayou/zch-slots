@@ -1,7 +1,8 @@
 body {
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    /*background-image:url('../images/background_scene.png');*/
+    min-height: 568px;
+    background-image: url('../images/gameBkBlock.png');
 }
 /*responsive canvas*/
 
@@ -30,10 +31,14 @@ body {
     text-align: center;
     z-index: 3;
     position: absolute;
-    width:100%;
+    width: 100%;
 }
-.loading-text{
-    color:#fff;
+.main-wrapper{
+    min-height: 568px;
+    background-image: url('../images/slots_mardiGras_background.png');
+}
+.loading-text {
+    color: #fff;
     position: relative;
     top: 50%;
     font-size: 1.2em;
@@ -71,4 +76,24 @@ img.slots-body {
 }
 .panel-info {
     height: 100px;
+    color: #fff;
+}
+.slots-btn {
+    position: relative;
+    color:#FCED3A;
+    width: 15%;
+    margin: 5px;
+    display: inline-block;
+    text-align: center;
+}
+.slots-btn img {
+    width: 100%;
+}
+.lotery-ctn{
+    position: absolute;
+    top:3px;
+    width:100%;
+}
+#totalBet{
+    color:#FCED3A;
 }
