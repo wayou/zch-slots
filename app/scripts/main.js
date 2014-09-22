@@ -68,7 +68,6 @@ var Slots = function() {
     };
     this.realBodyImageWidth = ~~this.WINDOW_WIDTH;
     this.ratio = this.realBodyImageWidth / this.bodyImagesSize.width; //the ratio of the image on the screen relative to the orignal image size
-
     this.canvas = $('#canvas')[0];
     this.ctx = this.canvas.getContext('2d');
     this.realBodyImageHeight = ~~ (this.ratio * this.bodyImagesSize.height);
@@ -100,6 +99,20 @@ var Slots = function() {
     this.linesInfo = [0, 0, 0, 0, 0, 0, 0, 0, 0]; // the result for each line
     this.defaultPos = []; //the default position for each icon on the canvas
     this.snds = [];
+    this.LINES = 9; //9 lines slots machine
+    this.BET_PER_LINE = 1;
+    this.MAX_BET = 10;
+    this.LOTERY_LINES = [
+        [2, 5, 8, 11, 14], //line 1
+        [1, 4, 7, 10, 13], //line 2
+        [3, 6, 9, 12, 15], //line 3
+        [1, 5, 9, 11, 13], //line 4
+        [3, 5, 7, 11, 15], //line 5
+        [1, 4, 8, 12, 15], //line 6
+        [3, 6, 8, 10, 13], //line 7
+        [2, 6, 8, 10, 14], //line 8
+        [2, 4, 8, 12, 14] //line 9
+    ];
 };
 
 Slots.prototype = {
@@ -308,7 +321,7 @@ Slots.prototype = {
             // entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
             entry.layout = entry.getRandomLayout(entry);
             entry.linesInfo = [3, 3, 3, 0, 0, 0, 0, 0, 0];
-        }, 2000);
+        }, 6000);
     },
     run: function(entry) {
         // , this.canvas, this.ctx, this.layout, this.wheel, that.items.icons
@@ -324,66 +337,76 @@ Slots.prototype = {
             icons = entry.items.icons,
             //duplicate the default positons
             pos = JSON.parse(JSON.stringify(entry.defaultPos)),
-            speed = 0, //for now lets get the speed being constant
+            //duplicate the default positons agin for another usage
+            defaultPos = JSON.parse(JSON.stringify(entry.defaultPos)),
+            speed = [0, 0, 0, 0, 0], //for now lets get the speed being constant
             MAX_SPEED = 20;
 
         function refresh() {
-            //clear the canvas
             canvas.width = canvas.width;
 
-            entry.layout.forEach(function(v, i, a) {
-                //update the position of each icon based on the game status
-                //stataus=1 spin up
-                //status=2 spin down
-                //status=0 to stop the animation
-                if (entry.GAME_STATUS == 1) {
-                    //spin up
-                    pos[i].y += speed;
-
-                    if (speed < MAX_SPEED) {
-                        speed += 0.01;
+            //stataus=1 spin up,status=2 spin down,status=0 to stop the animation
+            if (entry.GAME_STATUS == 1) {
+                //spin up
+                for (var i = 0; i < 5; i++) {
+                    //make the column speed up one by one
+                    if (speed[i] < MAX_SPEED) {
+                        if (i == 0) {
+                            speed[i] += 0.1;
+                        } else {
+                            if (speed[i - 1] > 2) {
+                                speed[i] += 0.1;
+                            }
+                        }
                     }
-                } else if (entry.GAME_STATUS == 2) {
-                    //the result loaded, lets speed down and draw the final layout
-                    //if all icons are in the right position ,stop the animation 
-                    //spin down
-                    pos[i].y += speed;
+                };
 
-                    // if (pos[i].y == entry.defaultPos[i].y) {
-                    //     speed = 0;
-                    //     entry.GAME_STATUS = 0;
-                    //     try {
-                    //         //stop the background sound
-                    //         SlotsSnds.background.pause();
-                    //         //and if wins, play the win sound
-                    //         SlotsSnds.win.currentTime = 0;
-                    //         SlotsSnds.win.play();
-                    //     } catch (err) {};
-                    //     pos = JSON.parse(JSON.stringify(entry.defaultPos));
-                    // } else {
-                    //     speed -= 0.01;
-                    // }
+            } else if (entry.GAME_STATUS == 2) {
 
-                    if (speed > 0) {
-                        speed -= 0.01;
+                for (var i = 0; i < 5; i++) {
+
+                    if (pos[i * 3].y < (defaultPos[i * 3].y + 1) && pos[i * 3].y > (defaultPos[i * 3].y - 1)) {
+
+                        //the first icon is in position
+                        speed[i] = 0;
+                        pos[i * 3 + 0] = JSON.parse(JSON.stringify(defaultPos[i * 3 + 0]));
+                        pos[i * 3 + 1] = JSON.parse(JSON.stringify(defaultPos[i * 3 + 1]));
+                        pos[i * 3 + 2] = JSON.parse(JSON.stringify(defaultPos[i * 3 + 2]));
+                        if (speed[4] == 0) {
+                            entry.GAME_STATUS = 0;
+                            try {
+                                //play the button sound
+                                SlotsSnds.win.currentTime = 0;
+                                SlotsSnds.win.play();
+                            } catch (err) {};
+                        }
+
                     } else {
-                        speed = 0;
-                        entry.GAME_STATUS = 0;
-                        try {
-                            //stop the background sound
-                            SlotsSnds.background.pause();
-                            //and if wins, play the win sound
-                            SlotsSnds.win.currentTime = 0;
-                            SlotsSnds.win.play();
-                        } catch (err) {};
-                        pos = JSON.parse(JSON.stringify(entry.defaultPos));
+                        //slow down one by one
+                        if (speed[i] > 0.5) {
+                            // speed[i] -= 0.1;
+                            if (i == 0) {
+                                speed[i] -= 0.1;
+                            } else {
+                                if (speed[i - 1] < 0.5 || speed[i - 1] == 0.5) {
+                                    speed[i] -= 0.1;
+                                }
+                            }
+                        }
                     }
-                }
+
+                };
+
+            }
+
+            entry.layout.forEach(function(v, i, a) {
                 if (pos[i].y > wheel.height) {
                     pos[i].y = -wheel.itemHeight;
                 }
+                pos[i].y += speed[~~(i / 3)];
                 ctx.drawImage(icons[v] || new Image(), pos[i].x, pos[i].y, itemWidth, itemHeight);
             });
+
             requestAnimationFrame(refresh);
         }
         requestAnimationFrame(refresh);
