@@ -95,7 +95,7 @@ var Slots = function() {
         betRate: 1
     };
     this.wheel = null;
-    this.layout = []; // 15items each range from 1~10, and item 0~2 represent the first column
+    this.layout = []; // 15items each rank from 1~10, and item 0~2 represent the first column
     this.linesInfo = [0, 0, 0, 0, 0, 0, 0, 0, 0]; // the result for each line
     this.defaultPos = []; //the default position for each icon on the canvas
     this.snds = [];
@@ -217,6 +217,79 @@ Slots.prototype = {
             that.game.lineCnt = originalCnt;
             $cntHolder.text(originalCnt);
             that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
+        });
+
+        //排行榜
+        $('#rankBoard').click(function() {
+            // $.getJSON({
+            //     uid: 0
+            // }, function(res) {
+            //     var rankContent = '<>'
+            //     $.pgwModal({
+            //         title: '排行榜',
+            //         content: '<h1>Hello1,</h1>'
+            //     });
+            // });
+
+            rankData = {
+                selfRank: 2,
+                rankList: [{
+                    name: 'tom',
+                    playerId: 1,
+                    rank: 1
+                }, {
+                    name: 'tom',
+                    playerId: 2,
+                    rank: 2
+                }, {
+                    name: 'tom',
+                    playerId: 3,
+                    rank: 3
+                }, {
+                    name: 'tom',
+                    playerId: 4,
+                    rank: 4
+                }, {
+                    name: 'tom',
+                    playerId: 5,
+                    rank: 5
+                }, {
+                    name: 'tom',
+                    playerId: 6,
+                    rank: 6
+                }, {
+                    name: 'tom',
+                    playerId: 7,
+                    rank: 7
+                }, {
+                    name: 'tom',
+                    playerId: 8,
+                    rank: 8
+                }, {
+                    name: 'tom',
+                    playerId: 9,
+                    rank: 9
+                }, {
+                    name: 'tom',
+                    playerId: 10,
+                    rank: 0
+                }, {
+                    name: 'tom',
+                    playerId: 1,
+                    rank: 1
+                }]
+            };
+
+            var rankContent = '<ul>'
+            rankData.rankList.forEach(function(v, i, a) {
+                //
+                rankContent+='<li><div>'
+            });
+            $.pgwModal({
+                title: '排行榜',
+                // content: rankContent
+                target:'#modalContent'
+            });
         });
     },
     getRandomLayout: function(entry) {
@@ -433,12 +506,6 @@ $(function() {
 
     var zchSlots = new Slots();
     zchSlots.init();
-});
 
-$('#rangeBoard').on('click', function() {
-    $.pgwModal({
-        target: '#modalContent',
-        title: '排行榜',
-        maxWidth: 800
-    });
-})
+
+});

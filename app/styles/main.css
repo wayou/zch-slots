@@ -58,7 +58,7 @@ body {
     position: relative;
     top: 45%;
 }
-#rangeBoard {
+#rankBoard {
     font-weight: bolder;
     font-size: 1.2em;
 }
@@ -158,4 +158,45 @@ img.slots-body {
     position: relative;
     top: 20px;
     z-index: 4;
+}
+.rank-table{
+    width:100%;
+}
+.rank-avatar,.rank-avatar-col {
+    width: 30px;
+}
+
+.rank-cnt-col {
+    width: 30px;
+    background-color: #034067;
+    color: #fff;
+    text-align: center;
+}
+.rank-user-col {
+    background-color: #002646;
+    color: #fff;
+}
+.rank-nickname{
+    font-size: 1.1em;
+    font-weight: bold;
+    color:#04E4F7;
+}
+.pgwModal .pm-content{
+    padding: 0;
+    background-color:#004C69;
+}
+.pgwModal .pm-content{
+    border-radius:0;
+}
+.rank-trend-col{
+    width:30px;
+    height:30px;
+    text-align: center;
+    background-color: #034067;
+}
+.rank-trend-col img{
+    max-height:30px;
+}
+.mine-rank{
+    color:#fff;
 }

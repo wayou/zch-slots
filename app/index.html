@@ -16,14 +16,14 @@
             <span class="loading-text">LOADING...</span>
         </div>
         <script>
-                //show the splash screen
-                //http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
-                document.getElementById('loading-wrapper').style.height= document.documentElement.clientHeight+'px';
+                                //show the splash screen
+                                //http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
+                                document.getElementById('loading-wrapper').style.height= document.documentElement.clientHeight+'px';
         </script>
         <div class="main-wrapper">
             <div class="top-menu"></div>
             <div class="score-info">
-                <img id="rangeBoard" class="score-panel-img" src="images/slots_mardiGras_table.png" alt="">
+                <img id="rankBoard" class="score-panel-img" src="images/slots_mardiGras_table.png" alt="">
             </div>
             <div class="machine" id="machineContainer">
                 <span id="winScore">$999</span>
@@ -33,7 +33,7 @@
             </div>
             <div class="panel-info">
                 <div class="avatar-container">
-                <span id="nickname">喵小星</span>
+                    <span id="nickname">喵小星</span>
                     <img src="images/default_avatar.jpg" alt="" id="avatar">
                 </div>
                 <div class="userbet-panel">
@@ -58,6 +58,95 @@
                     <div class="right-panel-info bottom-panel">
                         <span id="wealth">今天<span id="todayWin">$99</span></span>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div id="modalContent" style="display:none">
+            <div class="rank-container">
+                <table class="rank-table">
+                    <tr>
+                        <td class="rank-cnt-col"> 1 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">tom</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_equal.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 2 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_equal.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 3 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_down.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 4 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_equal.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 5 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_equal.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 6 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_up.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 7 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_equal.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 8 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_up.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 9 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_equal.png" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rank-cnt-col"> 10 </td>
+                        <td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>
+                        <td class="rank-user-col"> <span class="rank-nickname">john</span> <br> <span>$999</span> </td>
+                        <td class="rank-trend-col">
+                            <img src="images/rank_equal.png" alt="">
+                        </td>
+                    </tr>
+                </table>
+                <div class="mine-rank">
+                    <span>我的排名：1009</span>
                 </div>
             </div>
         </div>
