@@ -16,9 +16,9 @@
             <span class="loading-text">LOADING...</span>
         </div>
         <script>
-                                                        //show the splash screen
-                                                        //http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
-                                                        document.getElementById('loading-wrapper').style.height= document.documentElement.clientHeight+'px';
+                //show the splash screen
+                //http://stackoverflow.com/questions/1145850/how-to-get-height-of-entire-document-with-javascript
+                document.getElementById('loading-wrapper').style.height= document.documentElement.clientHeight+'px';
         </script>
         <div class="main-wrapper">
             <div class="top-menu"></div>
@@ -32,6 +32,9 @@
                 <canvas id="canvas">canvas not support :(</canvas>
             </div>
             <div class="panel-info">
+                <div class="avatar-container">
+                    <img src="images/default_avatar.jpg" alt="" id="avatar">
+                </div>
                 <div class="userbet-panel">
                     <div class="left-panle-info">
                         <div class="slots-btn" id="mkBet" >
@@ -43,8 +46,6 @@
                             <img src="images/linesBtn.png" alt="">
                         </div>
                     </div>
-                    <div class="center-panel-info">
-                    </div>
                 </div>
                 <div class="total-bet">
                     <div class="left-panle-info bottom-panel">
@@ -52,7 +53,7 @@
                     </div>
                     <div class="center-panel-info bottom-panel">
                         <span id="wealth">$1000</span>
-                    </div> 
+                    </div>
                     <div class="right-panel-info bottom-panel">
                         <span id="wealth">今天<span id="todayWin">$99</span></span>
                     </div>
