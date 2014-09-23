@@ -432,3 +432,11 @@ $(function() {
     var zchSlots = new Slots();
     zchSlots.init();
 });
+
+$('#rangeBoard').on('click', function() {
+    $.pgwModal({
+        target: '#modalContent',
+        title: 'Modal title 2',
+        maxWidth: 800
+    });
+})

@@ -2,7 +2,8 @@
   "name": "zch-slots",
   "private": true,
   "dependencies": {
-    "zepto": "~1.1.4"
+    "zepto": "~1.1.4",
+    "pgwmodal": "~2.0.0"
   },
   "devDependencies": {}
 }
