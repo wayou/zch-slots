@@ -436,7 +436,7 @@ $(function() {
 $('#rangeBoard').on('click', function() {
     $.pgwModal({
         target: '#modalContent',
-        title: 'Modal title 2',
+        title: '排行榜',
         maxWidth: 800
     });
 })
