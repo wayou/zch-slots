@@ -79,10 +79,12 @@ var Slots = function() {
     this.score = 0;
     this.ITEM_CNT = 10; //how many icons in this game
     this.user = {
-        uid: 0,
-        user_name: '未知',
-        avatar: 'images/default_avatar.jpg',
+        usercode: 0,
+        username: '未知',
+        nikeName: '未知',
+        headimgurl: 'images/default_avatar.jpg',
         wealth: 0,
+        today: 0,
         user_info_ready: false
     };
     this.items = {
@@ -178,6 +180,11 @@ Slots.prototype = {
                 SlotsSnds.btn.play();
             } catch (err) {};
 
+            if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
+                alert('金钱不够哦~');
+                return;
+            }
+
             if (that.checkValidation(that)) {
                 //here we go 
                 console.info('game start!');
@@ -197,7 +204,7 @@ Slots.prototype = {
         this.$mkBetBtn.on('tap click', function() {
             var $cntHolder = $('#betPerLineCnt'),
                 originalCnt = +$cntHolder.text();
-            if (originalCnt < that.MAX_BET) {
+            if (originalCnt < that.MAX_BET && ((originalCnt + 1) * (+$('#linesCnt').text()) < that.user.wealth)) {
                 originalCnt++;
             } else {
                 originalCnt = 1;
@@ -209,7 +216,7 @@ Slots.prototype = {
         this.$betLineBtn.on('tap click', function() {
             var $cntHolder = $('#linesCnt'),
                 originalCnt = +$cntHolder.text();
-            if (originalCnt < 9) {
+            if (originalCnt < 9 && ((originalCnt + 1) * (+$('#betPerLineCnt').text()) < that.user.wealth)) {
                 originalCnt++;
             } else {
                 originalCnt = 1;
@@ -219,18 +226,49 @@ Slots.prototype = {
             that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
         });
 
+        //play sound when button clicked
+        $('.slots-btn').on('click', function() {
+            try {
+                //play the button sound
+                SlotsSnds.btn.currentTime = 0;
+                SlotsSnds.btn.play();
+            } catch (err) {};
+        });
+
         //排行榜
-        $('#rankBoard').click(function() {
-            // $.getJSON({
-            //     uid: 0
-            // }, function(res) {
-            //     var rankContent = '<>'
-            //     $.pgwModal({
-            //         title: '排行榜',
-            //         content: '<h1>Hello1,</h1>'
-            //     });
+        $('#rankBoard').on('click', function() {
+            // $.ajax({
+            //     url: '/path/to/get/rank/data',
+            //     data: {
+            //         uid: 0
+            //     },
+            //     dataType: 'json',
+            //     success: function(res) {
+            //         //获取数据成功，显示排行榜
+            //         var rankContent = '<div class="rank-container"><table class="rank-table">'
+            //         rankData.rankList.forEach(function(v, i, a) {
+            //             rankContent += '<tr>' +
+            //                 '<td class="rank-cnt-col"> ' + i + ' </td>' +
+            //                 '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
+            //                 '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>$999</span> </td>' +
+            //                 '<td class="rank-trend-col">' +
+            //                 '<img src="../images/rank_equal.png" alt="">' +
+            //                 '</td>' +
+            //                 '</tr>';
+            //         });
+            //         rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
+            //         $.pgwModal({
+            //             title: '排行榜',
+            //             content: rankContent
+            //         });
+            //     },
+            //     error: function(data) {
+            //         alert("获取排行榜数据失败！");
+            //     }
             // });
 
+
+            //lock
             rankData = {
                 selfRank: 2,
                 rankList: [{
@@ -238,58 +276,60 @@ Slots.prototype = {
                     playerId: 1,
                     rank: 1
                 }, {
-                    name: 'tom',
+                    name: 'tom2',
                     playerId: 2,
                     rank: 2
                 }, {
-                    name: 'tom',
+                    name: 'tom3',
                     playerId: 3,
                     rank: 3
                 }, {
-                    name: 'tom',
+                    name: 'tom4',
                     playerId: 4,
                     rank: 4
                 }, {
-                    name: 'tom',
+                    name: 'tom5',
                     playerId: 5,
                     rank: 5
                 }, {
-                    name: 'tom',
+                    name: 'tom6',
                     playerId: 6,
                     rank: 6
                 }, {
-                    name: 'tom',
+                    name: 'tom7',
                     playerId: 7,
                     rank: 7
                 }, {
-                    name: 'tom',
+                    name: 'tom8',
                     playerId: 8,
                     rank: 8
                 }, {
-                    name: 'tom',
+                    name: 'tom9',
                     playerId: 9,
                     rank: 9
                 }, {
-                    name: 'tom',
+                    name: 'tom10',
                     playerId: 10,
                     rank: 0
-                }, {
-                    name: 'tom',
-                    playerId: 1,
-                    rank: 1
                 }]
             };
-
-            var rankContent = '<ul>'
+            var rankContent = '<div class="rank-container"><table class="rank-table">'
             rankData.rankList.forEach(function(v, i, a) {
-                //
-                rankContent+='<li><div>'
+                rankContent += '<tr>' +
+                    '<td class="rank-cnt-col"> ' + (i + 1) + ' </td>' +
+                    '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
+                    '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>$999</span> </td>' +
+                    '<td class="rank-trend-col">' +
+                    '<img src="../images/rank_equal.png" alt="">' +
+                    '</td>' +
+                    '</tr>';
             });
+            rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
             $.pgwModal({
                 title: '排行榜',
-                // content: rankContent
-                target:'#modalContent'
+                content: rankContent
             });
+
         });
     },
     getRandomLayout: function(entry) {
@@ -310,7 +350,7 @@ Slots.prototype = {
 
     },
     checkValidation: function(entry) {
-        if (entry.GAME_STATUS == 0 /*the game is ready to start*/ && entry.user.user_info_ready /*user data is ready so we know if the user has enough wealth to start the game*/ && entry.user.wealth >= (entry.game.bet * entry.game.lineCnt) /*the wealth is enough to start*/ && entry.items.readyCnt == entry.ITEM_CNT /*all 15 icons are loaded*/ ) {
+        if (entry.GAME_STATUS == 0 /*the game is ready to start*/ && entry.user.user_info_ready /*user data is ready so we know if the user has enough wealth to start the game*/ && entry.items.readyCnt == entry.ITEM_CNT /*all 15 icons are loaded*/ ) {
             //here we go 
             return true;
         } else {
@@ -338,23 +378,37 @@ Slots.prototype = {
         var params = entry.getQueryString();
 
         //when this works remove the default values 
-        entry.user.uid = params.uid || 1009;
-        entry.user.nick_name = params.nick_name || 'Atom';
-        entry.user.avatar = params.avatar || 'images/sample_avatar.jpg';
+        entry.user.usercode = params.usercode || 1009;
+        entry.user.username = params.nick_name || 'Atom';
+        entry.user.nikeName = params.nick_name || 'Atom';
+        entry.user.headimgurl = params.avatar || 'images/default_avatar.jpg';
+
+        //show the avatar and nickname to the page
+        $('#nickname').text(entry.user.nikeName);
+        $('#avatar').attr('src', entry.user.headimgurl);
 
         //get inital wealth info from server
-        // $.getJSON('/userinfo', {
-        //     uid: userInfo.uid,
-        //     uid: userInfo.nick_name,
-        //     uid: userInfo.avatar
-        // }, function(data) {
-        //     //set the user info
-        //     entry.user.wealth = data.wealth;
-        //     entry.user.user_info_ready = true;
+        // unlock
+        // $.ajax({
+        //     url: 'url to get initail wealth',
+        //     data {
+        //         usercode: entry.user.usercode
+        //     },
+        //     success: function(res) {
+        //         //set the user info
+        //         entry.user.wealth = data.wealth;
+        //         entry.user.user_info_ready = true;
+
+        //         $('#wealth').text(entry.user.wealth);
+        //     },
+        //     error: function(err) {
+        //         alert('获取用户信息失败，请检查网络');
+        //     }
         // });
 
         //lock
-        entry.user.wealth = 10000;
+        entry.user.wealth = 100;
+        $('#wealth').text(entry.user.wealth);
         entry.user.user_info_ready = true;
     },
     getQueryString: function() {
@@ -383,24 +437,37 @@ Slots.prototype = {
         //here we send request and update the data
         entry.GAME_STATUS = 1;
 
-        //lock
-        //each time start from a random layout
-        //entry.layout = entry.getRandomLayout(entry);
-
         //unlock
         //send the bet info the server and start the animation while waiting the result from the server
-        // $.post('/bet', {
-        //     uid: 001,
-        //     bet:1000,
-        //     lineCnt:1,
-        //     totalBet:entry.game.bet * entry.game.lineCnt
-        // }, function(result) {
-        //     //here we get the lines and combos result, and draw them out
-        // })
+        // $.ajax({
+        //     url: 'spin',
+        //     data: {
+        //         playerId: entry.user.usercode,
+        //         betPerLine: 1000,
+        //         lineCnt: 1,
+        //         chips:11,//剩余筹码
+        //         lines: $('#totalBet').text()
+        //     },
+        //     dataType: 'json',
+        //     success: function(res) {
+        //         setTimeout(function() {
+        //             entry.GAME_STATUS = 2;
+        //             entry.user.today = res.today; //本日总获得赢得筹码数
+        //             entry.user.winBet = res.winBet; //产出筹码数量
+        //             entry.layout = res.wheelTable; //中奖数据
+        //             entry.linesInfo = res.linesInfo; //每条线中奖情况
+        //         }, 7000);
+        //     },
+        //     error: function(err) {
+        //         alert('获取中奖结果出错，请检查网络');
+        //     }
+        // });
 
         //lock, mock layout data
         setTimeout(function() {
             entry.GAME_STATUS = 2;
+            entry.user.today = Math.random()*10+1;
+            entry.user.winBet =4;
             // entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
             entry.layout = entry.getRandomLayout(entry);
             entry.linesInfo = [3, 3, 3, 0, 0, 0, 0, 0, 0];
@@ -454,12 +521,16 @@ Slots.prototype = {
                         pos[i * 3 + 1] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 1]));
                         pos[i * 3 + 2] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 2]));
                         if (speed[4] == 0) {
+                            //end the round
                             entry.GAME_STATUS = 0;
                             try {
                                 //play the button sound
                                 SlotsSnds.win.currentTime = 0;
                                 SlotsSnds.win.play();
                             } catch (err) {};
+
+                            //if theres any lotery lines, draw them out one bye one
+                            //todo
                         }
 
                     } else {
