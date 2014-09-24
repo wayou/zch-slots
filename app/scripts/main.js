@@ -235,6 +235,14 @@ Slots.prototype = {
             } catch (err) {};
         });
 
+        $('#help').on('click', function() {
+            $.pgwModal({
+                title: '倍率表',
+                titleBar : false,
+                target: '#playtableContent'
+            });
+        });
+
         //排行榜
         $('#rankBoard').on('click', function() {
             // $.ajax({
@@ -577,6 +585,4 @@ $(function() {
 
     var zchSlots = new Slots();
     zchSlots.init();
-
-
 });

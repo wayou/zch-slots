@@ -5,7 +5,6 @@ body {
     background-image: url('../images/gameBkBlock.png');
     overflow: hidden;
 }
-
 /*end responsive canvas*/
 
 #loading-wrapper {
@@ -141,13 +140,12 @@ img.slots-body {
     z-index: 4;
     font-size: 0.8em;
 }
-.rank-table{
-    width:100%;
+.rank-table {
+    width: 100%;
 }
-.rank-avatar,.rank-avatar-col {
+.rank-avatar, .rank-avatar-col {
     width: 30px;
 }
-
 .rank-cnt-col {
     width: 30px;
     background-color: #034067;
@@ -158,27 +156,38 @@ img.slots-body {
     background-color: #002646;
     color: #fff;
 }
-.rank-nickname{
+.rank-nickname {
     font-size: 1.1em;
     font-weight: bold;
-    color:#04E4F7;
+    color: #04E4F7;
 }
-.pgwModal .pm-content{
+.pgwModal .pm-content {
     padding: 0;
-    background-color:#004C69;
+    background-color: #004C69;
 }
-.pgwModal .pm-content{
-    border-radius:0;
+.pgwModal .pm-content {
+    border-radius: 0;
 }
-.rank-trend-col{
-    width:30px;
-    height:30px;
+.rank-trend-col {
+    width: 30px;
+    height: 30px;
     text-align: center;
     background-color: #034067;
 }
-.rank-trend-col img{
-    max-height:30px;
+.rank-trend-col img {
+    max-height: 30px;
 }
-.mine-rank{
-    color:#fff;
+.mine-rank {
+    color: #fff;
+}
+#playtableContent{
+    display: none;
+}
+.playtable {
+    width:100%;
+}
+#help {
+    position: absolute;
+    right: 10px;
+    bottom: 20px;
 }
