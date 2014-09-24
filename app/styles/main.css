@@ -1,29 +1,10 @@
 body {
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    min-height: 480px;
+    min-height: 450px;
     background-image: url('../images/gameBkBlock.png');
     overflow: hidden;
 }
-/*responsive canvas*/
-
-/*reference : http://stackoverflow.com/questions/23445907/jquery-to-make-html5-canvas-responsive*/
-
-/*disable responsive in the very first version*/
-
-/*#canvas {
-    display: block;
-    padding: 0;
-    margin: 0 auto;
-    background-color: red;
-}
-@media(max-width: 1200px) {
-    #canvas {
-        width: 100%;
-        height: auto;
-        background-color: red;
-   }
-}*/
 
 /*end responsive canvas*/
 
@@ -35,7 +16,7 @@ body {
     width: 100%;
 }
 .main-wrapper {
-    min-height: 480px;
+    min-height: 450px;
     background-image: url('../images/slots_mardiGras_background.png');
 }
 .loading-text {
