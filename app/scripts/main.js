@@ -507,7 +507,7 @@ Slots.prototype = {
         function refresh() {
             canvas.width = canvas.width;
 
-            //stataus=1 spin up,status=2 spin down,status=0 to stop the animation, 3 the animation stopped
+            //stataus=1 spin up,status=2 spin down,status=0 to stop the animation, 3 the animation stopped and got bonus
             if (entry.GAME_STATUS == 1) {
                 //spin up
                 for (var i = 0; i < 5; i++) {
@@ -539,7 +539,17 @@ Slots.prototype = {
                             // judge if won this round
                             if (entry.user.winBet > 0) {
                                 //if win, draw the lines out
-                                entry.GAME_STATUS = 2;
+                                entry.GAME_STATUS = 3;
+                                $('#winScore').text('$' + entry.user.winBet);
+                                // draw the bonus lines
+                                var lines = entry.linesInfo;
+                                lines.forEach(function(v, i, a) {
+                                    if (v > 0) {
+                                        //line i got bonus
+                                        entry.LOTERY_LINES[i].
+                                    }
+                                });
+
                             } else {
                                 //else end the round
                                 entry.GAME_STATUS = 0;
@@ -564,16 +574,8 @@ Slots.prototype = {
                             }
                         }
                     }
-
                 };
 
-            } else if (entry.GAME_STATUS == 3) {
-                $('#winScore').text('$' + entry.user.winBet);
-                // draw the bonus lines
-                var lines = entry.linesInfo;
-                lines.forEach(function(v, i, a) {
-                    //
-                });
             }
 
             entry.layout.forEach(function(v, i, a) {
@@ -582,6 +584,10 @@ Slots.prototype = {
                 }
                 pos[i].y += speed[~~(i / 3)];
                 ctx.drawImage(icons[v] || new Image(), pos[i].x, pos[i].y, itemWidth, itemHeight);
+                if (entry.GAME_STATUS == 3) {
+                    //draw bonus icon border
+                    //todo
+                }
             });
 
             requestAnimationFrame(refresh);
