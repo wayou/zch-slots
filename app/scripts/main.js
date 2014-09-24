@@ -328,7 +328,7 @@ Slots.prototype = {
                     '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
                     '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>$999</span> </td>' +
                     '<td class="rank-trend-col">' +
-                    '<img src="../images/rank_equal.png" alt="">' +
+                    '<img src="images/rank_equal.png" alt="">' +
                     '</td>' +
                     '</tr>';
             });
