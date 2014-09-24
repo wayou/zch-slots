@@ -185,6 +185,7 @@ img.slots-body {
 }
 .playtable {
     width: 100%;
+    min-height: 400px;
 }
 #help {
     position: absolute;

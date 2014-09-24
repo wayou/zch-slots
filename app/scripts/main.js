@@ -115,6 +115,8 @@ var Slots = function() {
         [2, 6, 8, 10, 14], //line 8
         [2, 4, 8, 12, 14] //line 9
     ];
+    this.holderImg = new Image();
+    this.holderImg.src = 'images/holder.jpg';
 };
 
 Slots.prototype = {
@@ -243,6 +245,7 @@ Slots.prototype = {
                 titleBar: false,
                 target: '#playtableContent'
             });
+            $.pgwModal('reposition');
         });
 
         //排行榜
@@ -482,9 +485,9 @@ Slots.prototype = {
             entry.GAME_STATUS = 2;
             entry.user.today = Math.random() * 10 + 1;
             entry.user.winBet = 4;
-            entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
-            // entry.layout = entry.getRandomLayout(entry);
-            entry.linesInfo = [3, 3, 3, 0, 0, 0, 0, 0, 0];
+            // entry.layout = [4, 2, 3, 1, 2, 3, 10, 2, 5, 1, 10, 3, 1, 2, 3]; //mock the final result
+            entry.layout = entry.getRandomLayout(entry);
+            entry.linesInfo = [0, 0, 0, 0, 1, 0, 0, 0, 1];
         }, 8000);
     },
     run: function(entry) {
@@ -502,13 +505,17 @@ Slots.prototype = {
             //duplicate the default positons
             pos = JSON.parse(JSON.stringify(entry.defaultPos)),
             speed = [0, 0, 0, 0, 0], //for now lets get the speed being constant
-            MAX_SPEED = 20;
+            MAX_SPEED = 20,
+            bonusPos = [];
+
+
 
         function refresh() {
             canvas.width = canvas.width;
 
             //stataus=1 spin up,status=2 spin down,status=0 to stop the animation, 3 the animation stopped and got bonus
             if (entry.GAME_STATUS == 1) {
+                bonusPos = [];
                 //spin up
                 for (var i = 0; i < 5; i++) {
                     //make the column speed up one by one
@@ -541,14 +548,6 @@ Slots.prototype = {
                                 //if win, draw the lines out
                                 entry.GAME_STATUS = 3;
                                 $('#winScore').text('$' + entry.user.winBet);
-                                // draw the bonus lines
-                                var lines = entry.linesInfo;
-                                lines.forEach(function(v, i, a) {
-                                    if (v > 0) {
-                                        //line i got bonus
-                                        entry.LOTERY_LINES[i].
-                                    }
-                                });
 
                             } else {
                                 //else end the round
@@ -584,11 +583,28 @@ Slots.prototype = {
                 }
                 pos[i].y += speed[~~(i / 3)];
                 ctx.drawImage(icons[v] || new Image(), pos[i].x, pos[i].y, itemWidth, itemHeight);
-                if (entry.GAME_STATUS == 3) {
-                    //draw bonus icon border
-                    //todo
-                }
+
             });
+
+            if (entry.GAME_STATUS == 3) {
+                entry.linesInfo.forEach(function(v2, i2, a2) {
+                    if (v2 > 0) {
+                        //line i2 got bonus, the icon count is v2
+                        ctx.beginPath();
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = '#02FF02';
+                        entry.LOTERY_LINES[i2].forEach(function(v3, i3, a3) {
+                            // v3 is the position,
+                            if (i3 == 0) {
+                                ctx.moveTo(pos[v3 - 1].x + itemWidth / 2, pos[v3 - 1].y + itemHeight / 2);
+                            } else {
+                                ctx.lineTo(pos[v3 - 1].x + itemWidth / 2 + wheel.gutter, pos[v3 - 1].y + itemHeight / 2);
+                            }
+                        });
+                        ctx.stroke();
+                    }
+                })
+            }
 
             requestAnimationFrame(refresh);
         }
