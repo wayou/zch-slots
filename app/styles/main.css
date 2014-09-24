@@ -180,14 +180,19 @@ img.slots-body {
 .mine-rank {
     color: #fff;
 }
-#playtableContent{
+#playtableContent {
     display: none;
 }
 .playtable {
-    width:100%;
+    width: 100%;
 }
 #help {
     position: absolute;
     right: 10px;
     bottom: 20px;
+}
+.pm-title {
+    background: #003A54!important;
+    color: #fff;
+    border-bottom-width: 0px!important;
 }
