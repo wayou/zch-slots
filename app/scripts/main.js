@@ -75,7 +75,7 @@ var Slots = function() {
     this.$mkBetBtn = $('#mkBet');
     this.$betLineBtn = $('#betLine');
     this.$totalBet = $('#totalBet');
-    this.GAME_STATUS = 0; // 0 stopped, 1 running, 2 result loaded
+    this.GAME_STATUS = 0; // 0 stopped, 1 running, 2 result loaded,3 animateion stopped
     this.score = 0;
     this.ITEM_CNT = 10; //how many icons in this game
     this.user = {
@@ -212,6 +212,7 @@ Slots.prototype = {
             $cntHolder.text(originalCnt);
             that.game.bet = originalCnt;
             that.$totalBet.text(originalCnt * (+$('#linesCnt').text()));
+            $('#wealth').text(that.user.wealth - originalCnt * (+$('#linesCnt').text()));
         });
         this.$betLineBtn.on('tap click', function() {
             var $cntHolder = $('#linesCnt'),
@@ -224,6 +225,7 @@ Slots.prototype = {
             that.game.lineCnt = originalCnt;
             $cntHolder.text(originalCnt);
             that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
+            $('#wealth').text(that.user.wealth - originalCnt * (+$('#betPerLineCnt').text()));
         });
 
         //play sound when button clicked
@@ -238,7 +240,7 @@ Slots.prototype = {
         $('#help').on('click', function() {
             $.pgwModal({
                 title: '倍率表',
-                titleBar : false,
+                titleBar: false,
                 target: '#playtableContent'
             });
         });
@@ -358,7 +360,7 @@ Slots.prototype = {
 
     },
     checkValidation: function(entry) {
-        if (entry.GAME_STATUS == 0 /*the game is ready to start*/ && entry.user.user_info_ready /*user data is ready so we know if the user has enough wealth to start the game*/ && entry.items.readyCnt == entry.ITEM_CNT /*all 15 icons are loaded*/ ) {
+        if ((entry.GAME_STATUS == 0 || entry.GAME_STATUS == 3) /*the game is ready to start*/ && entry.user.user_info_ready /*user data is ready so we know if the user has enough wealth to start the game*/ && entry.items.readyCnt == entry.ITEM_CNT /*all 15 icons are loaded*/ ) {
             //here we go 
             return true;
         } else {
@@ -444,6 +446,10 @@ Slots.prototype = {
     spin: function(entry) {
         //here we send request and update the data
         entry.GAME_STATUS = 1;
+        //reset the winbet
+        entry.user.winBet = 0;
+        entry.user.wealth = $('#wealth').text();
+        $('#winScore').text('$0');
 
         //unlock
         //send the bet info the server and start the animation while waiting the result from the server
@@ -474,10 +480,10 @@ Slots.prototype = {
         //lock, mock layout data
         setTimeout(function() {
             entry.GAME_STATUS = 2;
-            entry.user.today = Math.random()*10+1;
-            entry.user.winBet =4;
-            // entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
-            entry.layout = entry.getRandomLayout(entry);
+            entry.user.today = Math.random() * 10 + 1;
+            entry.user.winBet = 4;
+            entry.layout = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]; //mock the final result
+            // entry.layout = entry.getRandomLayout(entry);
             entry.linesInfo = [3, 3, 3, 0, 0, 0, 0, 0, 0];
         }, 8000);
     },
@@ -501,7 +507,7 @@ Slots.prototype = {
         function refresh() {
             canvas.width = canvas.width;
 
-            //stataus=1 spin up,status=2 spin down,status=0 to stop the animation
+            //stataus=1 spin up,status=2 spin down,status=0 to stop the animation, 3 the animation stopped
             if (entry.GAME_STATUS == 1) {
                 //spin up
                 for (var i = 0; i < 5; i++) {
@@ -530,15 +536,19 @@ Slots.prototype = {
                         pos[i * 3 + 2] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 2]));
                         if (speed[4] == 0) {
                             //end the round
-                            entry.GAME_STATUS = 0;
+                            // judge if won this round
+                            if (entry.user.winBet > 0) {
+                                //if win, draw the lines out
+                                entry.GAME_STATUS = 2;
+                            } else {
+                                //else end the round
+                                entry.GAME_STATUS = 0;
+                            }
                             try {
                                 //play the button sound
                                 SlotsSnds.win.currentTime = 0;
                                 SlotsSnds.win.play();
                             } catch (err) {};
-
-                            //if theres any lotery lines, draw them out one bye one
-                            //todo
                         }
 
                     } else {
@@ -557,6 +567,13 @@ Slots.prototype = {
 
                 };
 
+            } else if (entry.GAME_STATUS == 3) {
+                $('#winScore').text('$' + entry.user.winBet);
+                // draw the bonus lines
+                var lines = entry.linesInfo;
+                lines.forEach(function(v, i, a) {
+                    //
+                });
             }
 
             entry.layout.forEach(function(v, i, a) {
