@@ -491,7 +491,7 @@ Slots.prototype = {
             // entry.layout = [4, 2, 3, 1, 2, 3, 10, 2, 5, 1, 10, 3, 1, 2, 3]; //mock the final result
             entry.layout = entry.getRandomLayout(entry);
             entry.linesInfo = [0, 0, 0, 0, 1, 0, 0, 0, 1];
-        }, 9000);
+        }, 7000);
     },
     run: function(entry) {
         // , this.canvas, this.ctx, this.layout, this.wheel, that.items.icons
@@ -586,7 +586,7 @@ Slots.prototype = {
                     speed++;
                 };
             } else if (entry.GAME_STATUS == 2) {
-                if ((pos[0].y < entry.defaultPos[0].y + 1) && (pos[0].y > entry.defaultPos[0].y - 1)) {
+                if ((pos[0].y < entry.defaultPos[0].y + 2) && (pos[0].y > entry.defaultPos[0].y - 2)) {
                     if (entry.user.winBet > 0) {
                         //if win, draw the lines out
                         entry.GAME_STATUS = 3;
@@ -605,7 +605,7 @@ Slots.prototype = {
                     speed = 0;
 
                 } else {
-                    if (speed > 5) {
+                    if (speed > 2) {
                         speed--;
                     }
                 }
@@ -627,10 +627,14 @@ Slots.prototype = {
                         //line i2 got bonus, the icon count is v2
                         ctx.beginPath();
                         ctx.lineWidth = 2;
-                        ctx.strokeStyle = '#02FF02';
+                        ctx.strokeStyle = '#DF1494';
+                        ctx.font = '15px arial';
+                        ctx.fillStyle = '#fff';
                         entry.LOTERY_LINES[i2].forEach(function(v3, i3, a3) {
                             // v3 is the position,
                             if (i3 == 0) {
+                                ctx.strokeText(i2 + 1, pos[v3 - 1].x + itemWidth / 2 - 5, pos[v3 - 1].y + itemHeight / 2);
+                                ctx.fillText(i2 + 1, pos[v3 - 1].x + itemWidth / 2 - 5, pos[v3 - 1].y + itemHeight / 2);
                                 ctx.moveTo(pos[v3 - 1].x + itemWidth / 2, pos[v3 - 1].y + itemHeight / 2);
                             } else {
                                 ctx.lineTo(pos[v3 - 1].x + itemWidth / 2 + wheel.gutter, pos[v3 - 1].y + itemHeight / 2);

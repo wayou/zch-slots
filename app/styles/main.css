@@ -191,6 +191,7 @@ img.slots-body {
     position: absolute;
     right: 10px;
     bottom: 20px;
+    width:30px;
 }
 .pm-title {
     background: #003A54!important;
