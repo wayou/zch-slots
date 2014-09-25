@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    min-height: 450px;
+    min-height: 400px;
     background-image: url('../images/bottom_pattern.png'); 
     overflow: hidden;
 }
@@ -14,7 +14,7 @@ body {
     width: 100%;
 }
 .main-wrapper {
-    min-height: 450px;
+    min-height: 400px;
     background-size: cover;
     background-image: url('../images/slots_mardiGras_background.png'); 
 }
