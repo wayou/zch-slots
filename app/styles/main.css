@@ -15,6 +15,7 @@ body {
 }
 .main-wrapper {
     min-height: 450px;
+    background-size: cover;
     background-image: url('../images/slots_mardiGras_background.png'); 
 }
 .loading-text {
