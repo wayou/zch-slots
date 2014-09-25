@@ -491,7 +491,7 @@ Slots.prototype = {
             // entry.layout = [4, 2, 3, 1, 2, 3, 10, 2, 5, 1, 10, 3, 1, 2, 3]; //mock the final result
             entry.layout = entry.getRandomLayout(entry);
             entry.linesInfo = [0, 0, 0, 0, 1, 0, 0, 0, 1];
-        }, 8000);
+        }, 9000);
     },
     run: function(entry) {
         // , this.canvas, this.ctx, this.layout, this.wheel, that.items.icons
@@ -511,8 +511,6 @@ Slots.prototype = {
             speed = 0, //without accelerate
             MAX_SPEED = 20,
             bonusPos = [];
-
-
 
         function refresh() {
             canvas.width = canvas.width;
@@ -607,7 +605,7 @@ Slots.prototype = {
                     speed = 0;
 
                 } else {
-                    if (speed > 2) {
+                    if (speed > 5) {
                         speed--;
                     }
                 }
