@@ -2,7 +2,7 @@ body {
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     min-height: 450px;
-    background-image: url('../images/gameBkBlock.png');
+    background-image: url('../images/gameBkBlock.png'); 
     overflow: hidden;
 }
 /*end responsive canvas*/
@@ -16,7 +16,7 @@ body {
 }
 .main-wrapper {
     min-height: 450px;
-    background-image: url('../images/slots_mardiGras_background.png');
+    background-image: url('../images/slots_mardiGras_background.png'); 
 }
 .loading-text {
     color: #fff;

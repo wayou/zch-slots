@@ -32,7 +32,7 @@
         window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
 
-    if (!window.requestAnimationFrame)
+    if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
@@ -43,11 +43,14 @@
             lastTime = currTime + timeToCall;
             return id;
         };
+    }
 
-    if (!window.cancelAnimationFrame)
+    if (!window.cancelAnimationFrame) {
         window.cancelAnimationFrame = function(id) {
             clearTimeout(id);
         };
+    }
+
 }());
 
 //the main slot class
@@ -504,7 +507,8 @@ Slots.prototype = {
             icons = entry.items.icons,
             //duplicate the default positons
             pos = JSON.parse(JSON.stringify(entry.defaultPos)),
-            speed = [0, 0, 0, 0, 0], //for now lets get the speed being constant
+            // speed = [0, 0, 0, 0, 0], //with accelerate
+            speed = 0, //without accelerate
             MAX_SPEED = 20,
             bonusPos = [];
 
@@ -514,74 +518,107 @@ Slots.prototype = {
             canvas.width = canvas.width;
 
             //stataus=1 spin up,status=2 spin down,status=0 to stop the animation, 3 the animation stopped and got bonus
+            //this is the accelerate version
+            // if (entry.GAME_STATUS == 1) {
+            //     bonusPos = [];
+            //     //spin up
+            //     for (var i = 0; i < 5; i++) {
+            //         //make the column speed up one by one
+            //         if (speed[i] < MAX_SPEED) {
+            //             if (i == 0) {
+            //                 speed[i] += 0.5;
+            //             } else {
+            //                 if (speed[i - 1] > 10) {
+            //                     speed[i] += 0.5;
+            //                 }
+            //             }
+            //         }
+            //     };
+
+            // } else if (entry.GAME_STATUS == 2) {
+
+            //     for (var i = 0; i < 5; i++) {
+
+            //         if (pos[i * 3].y < (entry.defaultPos[i * 3].y + 1) && pos[i * 3].y > (entry.defaultPos[i * 3].y - 1)) {
+
+            //             //the first icon is in position
+            //             speed[i] = 0;
+            //             pos[i * 3 + 0] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 0]));
+            //             pos[i * 3 + 1] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 1]));
+            //             pos[i * 3 + 2] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 2]));
+            //             if (speed[4] == 0) {
+            //                 //end the round
+            //                 // judge if won this round
+            //                 if (entry.user.winBet > 0) {
+            //                     //if win, draw the lines out
+            //                     entry.GAME_STATUS = 3;
+            //                     $('#winScore').text('$' + entry.user.winBet);
+
+            //                 } else {
+            //                     //else end the round
+            //                     entry.GAME_STATUS = 0;
+            //                 }
+            //                 try {
+            //                     //play the button sound
+            //                     SlotsSnds.win.currentTime = 0;
+            //                     SlotsSnds.win.play();
+            //                 } catch (err) {};
+            //             }
+
+            //         } else {
+            //             //slow down one by one
+            //             if (speed[i] > 0.5) {
+            //                 // speed[i] -= 0.1;
+            //                 if (i == 0) {
+            //                     speed[i] -= 0.1;
+            //                 } else {
+            //                     if (speed[i - 1] < 0.5 || speed[i - 1] == 0.5) {
+            //                         speed[i] -= 0.1;
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     };
+
+            // }
+
+            //without accelerate
             if (entry.GAME_STATUS == 1) {
-                bonusPos = [];
-                //spin up
-                for (var i = 0; i < 5; i++) {
-                    //make the column speed up one by one
-                    if (speed[i] < MAX_SPEED) {
-                        if (i == 0) {
-                            speed[i] += 0.5;
-                        } else {
-                            if (speed[i - 1] > 10) {
-                                speed[i] += 0.5;
-                            }
-                        }
-                    }
+                if (speed < MAX_SPEED) {
+                    speed++;
                 };
-
             } else if (entry.GAME_STATUS == 2) {
-
-                for (var i = 0; i < 5; i++) {
-
-                    if (pos[i * 3].y < (entry.defaultPos[i * 3].y + 1) && pos[i * 3].y > (entry.defaultPos[i * 3].y - 1)) {
-
-                        //the first icon is in position
-                        speed[i] = 0;
-                        pos[i * 3 + 0] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 0]));
-                        pos[i * 3 + 1] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 1]));
-                        pos[i * 3 + 2] = JSON.parse(JSON.stringify(entry.defaultPos[i * 3 + 2]));
-                        if (speed[4] == 0) {
-                            //end the round
-                            // judge if won this round
-                            if (entry.user.winBet > 0) {
-                                //if win, draw the lines out
-                                entry.GAME_STATUS = 3;
-                                $('#winScore').text('$' + entry.user.winBet);
-
-                            } else {
-                                //else end the round
-                                entry.GAME_STATUS = 0;
-                            }
-                            try {
-                                //play the button sound
-                                SlotsSnds.win.currentTime = 0;
-                                SlotsSnds.win.play();
-                            } catch (err) {};
-                        }
+                if ((pos[0].y < entry.defaultPos[0].y + 1) && (pos[0].y > entry.defaultPos[0].y - 1)) {
+                    if (entry.user.winBet > 0) {
+                        //if win, draw the lines out
+                        entry.GAME_STATUS = 3;
+                        $('#winScore').text('$' + entry.user.winBet);
+                        try {
+                            //play the button sound
+                            SlotsSnds.win.currentTime = 0;
+                            SlotsSnds.win.play();
+                        } catch (err) {};
 
                     } else {
-                        //slow down one by one
-                        if (speed[i] > 0.5) {
-                            // speed[i] -= 0.1;
-                            if (i == 0) {
-                                speed[i] -= 0.1;
-                            } else {
-                                if (speed[i - 1] < 0.5 || speed[i - 1] == 0.5) {
-                                    speed[i] -= 0.1;
-                                }
-                            }
-                        }
+                        //else end the round
+                        entry.GAME_STATUS = 0;
                     }
-                };
+                    pos = JSON.parse(JSON.stringify(entry.defaultPos));
+                    speed = 0;
 
+                } else {
+                    if (speed > 2) {
+                        speed--;
+                    }
+                }
             }
 
             entry.layout.forEach(function(v, i, a) {
                 if (pos[i].y > wheel.height) {
                     pos[i].y = -wheel.itemHeight;
                 }
-                pos[i].y += speed[~~(i / 3)];
+                // pos[i].y += speed[~~(i / 3)];//with accelerate
+                pos[i].y += speed; //without accelerate
                 ctx.drawImage(icons[v] || new Image(), pos[i].x, pos[i].y, itemWidth, itemHeight);
 
             });
@@ -605,7 +642,6 @@ Slots.prototype = {
                     }
                 })
             }
-
             requestAnimationFrame(refresh);
         }
         requestAnimationFrame(refresh);
