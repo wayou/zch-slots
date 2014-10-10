@@ -57,6 +57,7 @@
 var Slots = function() {
     this.WINDOW_WIDTH = window.innerWidth;
     this.WINDOW_HEIGHT = window.innerHeight;
+    this.COLORS = ['#FAFA17', '#ff1493', '#adff2f', '#c617e8', '#F1753F', '#ffffff', '#E9282F', '#55BEED', '#EA2830'];
     this.bodyImagesSize = {
         width: 640,
         height: 377
@@ -84,7 +85,9 @@ var Slots = function() {
     this.user = {
         usercode: 0,
         username: '未知',
-        nikeName: '未知',
+        nikename: '未知',
+        playerId: 0,
+        userId: 0,
         headimgurl: 'images/default_avatar.jpg',
         wealth: 0,
         today: 0,
@@ -209,15 +212,13 @@ Slots.prototype = {
         this.$mkBetBtn.on('tap click', function() {
             var $cntHolder = $('#betPerLineCnt'),
                 originalCnt = +$cntHolder.text();
-            if (originalCnt < that.MAX_BET && ((originalCnt + 1) * (+$('#linesCnt').text()) < that.user.wealth)) {
-                originalCnt++;
-            } else {
-                originalCnt = 1;
+            if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)) {
+                originalCnt += 10;
             }
             $cntHolder.text(originalCnt);
             that.game.bet = originalCnt;
             that.$totalBet.text(originalCnt * (+$('#linesCnt').text()));
-            $('#wealth').text(that.user.wealth - originalCnt * (+$('#linesCnt').text()));
+            // $('#wealth').text(that.user.wealth - originalCnt * (+$('#linesCnt').text()));
         });
         this.$betLineBtn.on('tap click', function() {
             var $cntHolder = $('#linesCnt'),
@@ -230,7 +231,7 @@ Slots.prototype = {
             that.game.lineCnt = originalCnt;
             $cntHolder.text(originalCnt);
             that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
-            $('#wealth').text(that.user.wealth - originalCnt * (+$('#betPerLineCnt').text()));
+            // $('#wealth').text(that.user.wealth - originalCnt * (+$('#betPerLineCnt').text()));
         });
 
         //play sound when button clicked
@@ -253,98 +254,105 @@ Slots.prototype = {
 
         //排行榜
         $('#rankBoard').on('click', function() {
-            // $.ajax({
-            //     url: '/path/to/get/rank/data',
-            //     data: {
-            //         uid: 0
-            //     },
-            //     dataType: 'json',
-            //     success: function(res) {
-            //         //获取数据成功，显示排行榜
-            //         var rankContent = '<div class="rank-container"><table class="rank-table">'
-            //         rankData.rankList.forEach(function(v, i, a) {
-            //             rankContent += '<tr>' +
-            //                 '<td class="rank-cnt-col"> ' + i + ' </td>' +
-            //                 '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
-            //                 '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>$999</span> </td>' +
-            //                 '<td class="rank-trend-col">' +
-            //                 '<img src="../images/rank_equal.png" alt="">' +
-            //                 '</td>' +
-            //                 '</tr>';
-            //         });
-            //         rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
-            //         $.pgwModal({
-            //             title: '排行榜',
-            //             content: rankContent
-            //         });
-            //     },
-            //     error: function(data) {
-            //         alert("获取排行榜数据失败！");
-            //     }
-            // });
+            $.ajax({
+                url: 'http://54.223.143.253:18080/sgac/forwardList.action',
+                data: {
+                    playerId: that.user.playerId,
+                    mid: 1020,
+                    gameId: 90031,
+                    type: 1,
+                    tType: 1,
+                    roomId: 1,
+                    msgid: 2203
+                },
+                dataType: 'json',
+                success: function(res) {
+                    var rankData = res;
+                    //获取数据成功，显示排行榜
+                    var rankContent = '<div class="rank-container"><table class="rank-table">'
+                    rankData.rankList.forEach(function(v, i, a) {
+                        rankContent += '<tr>' +
+                            '<td class="rank-cnt-col"> ' + (+i+1) + ' </td>' +
+                            // '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
+                            '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
+                        // '<td class="rank-trend-col">' +
+                        // '<img src="../images/rank_equal.png" alt="">' +
+                        // '</td>' +
+                        '</tr>';
+                    });
+                    rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
+                    $.pgwModal({
+                        title: '排行榜',
+                        content: rankContent
+                    });
+                },
+                error: function(data) {
+                    //alert("获取排行榜数据失败！");
+                }
+            });
 
 
             //lock
-            rankData = {
-                selfRank: 2,
-                rankList: [{
-                    name: 'tom',
-                    playerId: 1,
-                    rank: 1
-                }, {
-                    name: 'tom2',
-                    playerId: 2,
-                    rank: 2
-                }, {
-                    name: 'tom3',
-                    playerId: 3,
-                    rank: 3
-                }, {
-                    name: 'tom4',
-                    playerId: 4,
-                    rank: 4
-                }, {
-                    name: 'tom5',
-                    playerId: 5,
-                    rank: 5
-                }, {
-                    name: 'tom6',
-                    playerId: 6,
-                    rank: 6
-                }, {
-                    name: 'tom7',
-                    playerId: 7,
-                    rank: 7
-                }, {
-                    name: 'tom8',
-                    playerId: 8,
-                    rank: 8
-                }, {
-                    name: 'tom9',
-                    playerId: 9,
-                    rank: 9
-                }, {
-                    name: 'tom10',
-                    playerId: 10,
-                    rank: 0
-                }]
-            };
-            var rankContent = '<div class="rank-container"><table class="rank-table">'
-            rankData.rankList.forEach(function(v, i, a) {
-                rankContent += '<tr>' +
-                    '<td class="rank-cnt-col"> ' + (i + 1) + ' </td>' +
-                    '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
-                    '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>$999</span> </td>' +
-                    '<td class="rank-trend-col">' +
-                    '<img src="images/rank_equal.png" alt="">' +
-                    '</td>' +
-                    '</tr>';
-            });
-            rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
-            $.pgwModal({
-                title: '排行榜',
-                content: rankContent
-            });
+            // rankData = {
+            //     selfRank: 2,
+            //     rankList: [{
+            //         name: 'tom',
+            //         playerId: 1,
+            //         rank: 1
+            //     }, {
+            //         name: 'tom2',
+            //         playerId: 2,
+            //         rank: 2
+            //     }, {
+            //         name: 'tom3',
+            //         playerId: 3,
+            //         rank: 3
+            //     }, {
+            //         name: 'tom4',
+            //         playerId: 4,
+            //         rank: 4
+            //     }, {
+            //         name: 'tom5',
+            //         playerId: 5,
+            //         rank: 5
+            //     }, {
+            //         name: 'tom6',
+            //         playerId: 6,
+            //         rank: 6
+            //     }, {
+            //         name: 'tom7',
+            //         playerId: 7,
+            //         rank: 7
+            //     }, {
+            //         name: 'tom8',
+            //         playerId: 8,
+            //         rank: 8
+            //     }, {
+            //         name: 'tom9',
+            //         playerId: 9,
+            //         rank: 9
+            //     }, {
+            //         name: 'tom10',
+            //         playerId: 10,
+            //         rank: 0
+            //     }]
+            // };
+            // var rankContent = '<div class="rank-container"><table class="rank-table">';
+            // rankData.rankList.forEach(function(v, i, a) {
+            //     rankContent += '<tr>' +
+            //         '<td class="rank-cnt-col"> ' + (i + 1) + ' </td>' +
+            //         '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
+            //         '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>$999</span> </td>' +
+            //         // '<td class="rank-trend-col">' +
+            //         // '<img src="images/rank_equal.png" alt="">' +
+            //         // '</td>' +
+            //         '</tr>';
+            // });
+            // rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
+            // $.pgwModal({
+            //     title: '排行榜',
+            //     content: rankContent
+            // });
 
         });
     },
@@ -394,38 +402,61 @@ Slots.prototype = {
         var params = entry.getQueryString();
 
         //when this works remove the default values 
-        entry.user.usercode = params.usercode || 1009;
-        entry.user.username = params.nick_name || 'Atom';
-        entry.user.nikeName = params.nick_name || 'Atom';
-        entry.user.headimgurl = params.avatar || 'images/default_avatar.jpg';
+        entry.user.userId = params.usercode || 20140903150307992837;
+        entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+        entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+        entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
 
         //show the avatar and nickname to the page
-        $('#nickname').text(entry.user.nikeName);
+        $('#nickname').text(entry.user.nickname.length > 5 ? entry.user.nickname.substr(0, 5) + '...' : entry.user.nickname);
         $('#avatar').attr('src', entry.user.headimgurl);
 
-        //get inital wealth info from server
-        // unlock
-        // $.ajax({
-        //     url: 'url to get initail wealth',
-        //     data {
-        //         usercode: entry.user.usercode
-        //     },
-        //     success: function(res) {
-        //         //set the user info
-        //         entry.user.wealth = data.wealth;
-        //         entry.user.user_info_ready = true;
+        //login
+        $.ajax({
+            url: 'http://54.223.143.253:18080/sgac/thirdPartyLogin.action',
+            data: {
+                userName: entry.user.username,
+                userId: entry.user.userId
+            },
+            dataType: 'json',
+            success: function(res) {
+                //set the user info
+                entry.user.playerId =res.playerId;
 
-        //         $('#wealth').text(entry.user.wealth);
-        //     },
-        //     error: function(err) {
-        //         alert('获取用户信息失败，请检查网络');
-        //     }
-        // });
+                //get inital wealth info from server
+                // unlock
+                $.ajax({
+                    url: 'http://54.223.143.253:18080/sgac/forwardList.action',
+                    data: {
+                        gameId: 90031,
+                        playerId: entry.user.playerId,
+                        roomId: 1,
+                        msgid: 20050,
+                        mid: 1020,
+                        type: 1,
+                        name: entry.user.username
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        //set the user info
+                        entry.user.wealth = +res.tableInfo.info[0].chips;
+                        entry.user.user_info_ready = true;
+                        $('#wealth').text(entry.user.wealth);
+                    },
+                    error: function(err) {
+                        alert('获取用户信息失败，请检查网络');
+                    }
+                });
+            },
+            error: function(err) {
+                alert('登入失败，请重试');
+            }
+        });
 
         //lock
-        entry.user.wealth = 100;
-        $('#wealth').text(entry.user.wealth);
-        entry.user.user_info_ready = true;
+        // entry.user.wealth = 100;
+        // $('#wealth').text(entry.user.wealth);
+        // entry.user.user_info_ready = true;
     },
     getQueryString: function() {
         //helper function to get query parameters from url
@@ -459,39 +490,44 @@ Slots.prototype = {
 
         //unlock
         //send the bet info the server and start the animation while waiting the result from the server
-        // $.ajax({
-        //     url: 'spin',
-        //     data: {
-        //         playerId: entry.user.usercode,
-        //         betPerLine: 1000,
-        //         lineCnt: 1,
-        //         chips:11,//剩余筹码
-        //         lines: $('#totalBet').text()
-        //     },
-        //     dataType: 'json',
-        //     success: function(res) {
-        //         setTimeout(function() {
-        //             entry.GAME_STATUS = 2;
-        //             entry.user.today = res.today; //本日总获得赢得筹码数
-        //             entry.user.winBet = res.winBet; //产出筹码数量
-        //             entry.layout = res.wheelTable; //中奖数据
-        //             entry.linesInfo = res.linesInfo; //每条线中奖情况
-        //         }, 7000);
-        //     },
-        //     error: function(err) {
-        //         alert('获取中奖结果出错，请检查网络');
-        //     }
-        // });
+        $.ajax({
+            url: 'http://54.223.143.253:18080/sgac/forwardList.action',
+            data: {
+                name: entry.user.username,
+                playerId: entry.user.playerId,
+                lines: $('#totalBet').text(),
+                betPerLine: $('#betPerLineCnt').text(),
+                type: 1,
+                gameId: 90031,
+                roomId: 1,
+                msgid: 20052,
+                mid: 1020
+            },
+            dataType: 'json',
+            success: function(res) {
+                setTimeout(function() {
+                    entry.GAME_STATUS = 2;
+                    entry.user.winBet = res.win; //产出筹码数量
+                    entry.user.wealth = res.chips;
+                    entry.layout = res.wheelTable; //中奖数据
+                    entry.linesInfo = res.linesInfo; //每条线中奖情况
+                    console.log(entry.linesInfo, entry.layout);
+                }, 6000);
+            },
+            error: function(err) {
+                alert('获取中奖结果出错，请检查网络');
+            }
+        });
 
         //lock, mock layout data
-        setTimeout(function() {
-            entry.GAME_STATUS = 2;
-            entry.user.today = Math.random() * 10 + 1;
-            entry.user.winBet = 4;
-            // entry.layout = [4, 2, 3, 1, 2, 3, 10, 2, 5, 1, 10, 3, 1, 2, 3]; //mock the final result
-            entry.layout = entry.getRandomLayout(entry);
-            entry.linesInfo = [0, 0, 0, 0, 1, 0, 0, 0, 1];
-        }, 7000);
+        // setTimeout(function() {
+        //     entry.GAME_STATUS = 2;
+        //     entry.user.today = Math.random() * 10 + 1;
+        //     entry.user.winBet = 4;
+        //     // entry.layout = [4, 2, 3, 1, 2, 3, 10, 2, 5, 1, 10, 3, 1, 2, 3]; //mock the final result
+        //     entry.layout = entry.getRandomLayout(entry);
+        //     entry.linesInfo = [0, 0, 0, 0, 0, 0, 1, 0, 0];
+        // }, 3000);
     },
     run: function(entry) {
         // , this.canvas, this.ctx, this.layout, this.wheel, that.items.icons
@@ -626,20 +662,20 @@ Slots.prototype = {
                     if (v2 > 0) {
                         //line i2 got bonus, the icon count is v2
                         ctx.beginPath();
-                        ctx.lineWidth = 2;
-                        ctx.strokeStyle = '#DF1494';
-                        ctx.font = '15px arial';
-                        ctx.fillStyle = '#fff';
+                        ctx.lineWidth = 3;
+                        // ctx.font = '18px arial';
+                        ctx.fillStyle = '#000';
                         entry.LOTERY_LINES[i2].forEach(function(v3, i3, a3) {
                             // v3 is the position,
                             if (i3 == 0) {
-                                ctx.strokeText(i2 + 1, pos[v3 - 1].x + itemWidth / 2 - 5, pos[v3 - 1].y + itemHeight / 2);
-                                ctx.fillText(i2 + 1, pos[v3 - 1].x + itemWidth / 2 - 5, pos[v3 - 1].y + itemHeight / 2);
+                                // ctx.strokeText(i2 + 1, pos[v3 - 1].x + itemWidth / 2 - 5, pos[v3 - 1].y + itemHeight / 2);
+                                // ctx.fillText(i2 + 1, pos[v3 - 1].x + itemWidth / 2 - 5, pos[v3 - 1].y + itemHeight / 2);
                                 ctx.moveTo(pos[v3 - 1].x + itemWidth / 2, pos[v3 - 1].y + itemHeight / 2);
                             } else {
                                 ctx.lineTo(pos[v3 - 1].x + itemWidth / 2 + wheel.gutter, pos[v3 - 1].y + itemHeight / 2);
                             }
                         });
+                        ctx.strokeStyle = entry.COLORS[i2];
                         ctx.stroke();
                     }
                 })
