@@ -512,7 +512,7 @@ Slots.prototype = {
                     entry.layout = res.wheelTable; //中奖数据
                     entry.linesInfo = res.linesInfo; //每条线中奖情况
                     console.log(entry.linesInfo, entry.layout);
-                }, 6000);
+                }, 7000);
             },
             error: function(err) {
                 alert('获取中奖结果出错，请检查网络');
