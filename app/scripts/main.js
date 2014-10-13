@@ -209,6 +209,15 @@ Slots.prototype = {
                 console.log('game is running');
             }
         });
+
+        //make the wheel sound play repeatedly
+        SlotsSnds.background.addEventListener('ended', function() {
+            if (that.GAME_STATUS == 1) {
+                this.currentTime = 0;
+                this.play();
+            }
+        }, false);
+
         this.$mkBetBtn.on('tap click', function() {
             var $cntHolder = $('#betPerLineCnt'),
                 originalCnt = +$cntHolder.text();
@@ -272,9 +281,9 @@ Slots.prototype = {
                     var rankContent = '<div class="rank-container"><table class="rank-table">'
                     rankData.rankList.forEach(function(v, i, a) {
                         rankContent += '<tr>' +
-                            '<td class="rank-cnt-col"> ' + (+i+1) + ' </td>' +
-                            // '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
-                            '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
+                            '<td class="rank-cnt-col"> ' + (+i + 1) + ' </td>' +
+                        // '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
+                        '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
                         // '<td class="rank-trend-col">' +
                         // '<img src="../images/rank_equal.png" alt="">' +
                         // '</td>' +
@@ -393,7 +402,7 @@ Slots.prototype = {
                     });
                 }
             };
-            entry.items.icons[i].src = 'images/items/' + i + '.png';
+            entry.items.icons[i].src = 'images/items/' + (i - 1) + '.png';
         }
     },
     getUserData: function(entry) {
@@ -402,7 +411,7 @@ Slots.prototype = {
         var params = entry.getQueryString();
 
         //when this works remove the default values 
-        entry.user.userId = params.usercode || 20140903150307992837;
+        entry.user.userId = params.usercode || 20140909194914517177;
         entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
@@ -421,7 +430,7 @@ Slots.prototype = {
             dataType: 'json',
             success: function(res) {
                 //set the user info
-                entry.user.playerId =res.playerId;
+                entry.user.playerId = res.playerId;
 
                 //get inital wealth info from server
                 // unlock
@@ -495,7 +504,7 @@ Slots.prototype = {
             data: {
                 name: entry.user.username,
                 playerId: entry.user.playerId,
-                lines: $('#totalBet').text(),
+                lines: $('#linesCnt').text(),
                 betPerLine: $('#betPerLineCnt').text(),
                 type: 1,
                 gameId: 90031,
@@ -637,6 +646,10 @@ Slots.prototype = {
                         //else end the round
                         entry.GAME_STATUS = 0;
                     }
+
+                    //end the roll sound
+                    SlotsSnds.background.pause();
+
                     pos = JSON.parse(JSON.stringify(entry.defaultPos));
                     speed = 0;
 
