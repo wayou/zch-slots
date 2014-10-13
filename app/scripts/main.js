@@ -267,6 +267,7 @@ Slots.prototype = {
                 url: 'http://54.223.143.253:18080/sgac/forwardList.action',
                 data: {
                     playerId: that.user.playerId,
+                    usercode: that.user.userId,
                     mid: 1020,
                     gameId: 90031,
                     type: 1,
@@ -391,7 +392,7 @@ Slots.prototype = {
         }
     },
     loadResource: function(entry) {
-        for (var i = entry.ITEM_CNT; i > 0; i--) {
+        for (var i = entry.ITEM_CNT - 1; i > -1; i--) {
             entry.items.icons[i] = new Image();
             entry.items.icons[i].onload = function() {
                 entry.items.readyCnt++;
@@ -402,7 +403,7 @@ Slots.prototype = {
                     });
                 }
             };
-            entry.items.icons[i].src = 'images/items/' + (i - 1) + '.png';
+            entry.items.icons[i].src = 'images/items/' + i + '.png';
         }
     },
     getUserData: function(entry) {
@@ -425,7 +426,8 @@ Slots.prototype = {
             url: 'http://54.223.143.253:18080/sgac/thirdPartyLogin.action',
             data: {
                 userName: entry.user.username,
-                userId: entry.user.userId
+                userId: entry.user.userId,
+                usercode: entry.user.userId
             },
             dataType: 'json',
             success: function(res) {
@@ -438,6 +440,7 @@ Slots.prototype = {
                     url: 'http://54.223.143.253:18080/sgac/forwardList.action',
                     data: {
                         gameId: 90031,
+                        usercode: entry.user.userId,
                         playerId: entry.user.playerId,
                         roomId: 1,
                         msgid: 20050,
@@ -503,6 +506,7 @@ Slots.prototype = {
             url: 'http://54.223.143.253:18080/sgac/forwardList.action',
             data: {
                 name: entry.user.username,
+                usercode: entry.user.userId,
                 playerId: entry.user.playerId,
                 lines: $('#linesCnt').text(),
                 betPerLine: $('#betPerLineCnt').text(),
