@@ -212,7 +212,7 @@ Slots.prototype = {
 
         //make the wheel sound play repeatedly
         SlotsSnds.background.addEventListener('timeupdate', function() {
-            if (that.GAME_STATUS == 1&&this.currentTime>1) {
+            if (that.GAME_STATUS == 1&&this.currentTime>0.7) {
                 this.currentTime = 0;
                 this.play();
             }
