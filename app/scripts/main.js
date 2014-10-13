@@ -369,7 +369,7 @@ Slots.prototype = {
     getRandomLayout: function(entry) {
         var layout = [];
         for (var i = 14; i >= 0; i--) {
-            layout.push(~~(Math.random() * (entry.ITEM_CNT) + 1));
+            layout.push(~~(Math.random() * (entry.ITEM_CNT)));
         };
         return layout;
     },
