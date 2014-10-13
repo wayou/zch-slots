@@ -211,8 +211,8 @@ Slots.prototype = {
         });
 
         //make the wheel sound play repeatedly
-        SlotsSnds.background.addEventListener('ended', function() {
-            if (that.GAME_STATUS == 1) {
+        SlotsSnds.background.addEventListener('timeupdate', function() {
+            if (that.GAME_STATUS == 1&&this.currentTime>1) {
                 this.currentTime = 0;
                 this.play();
             }
@@ -656,6 +656,9 @@ Slots.prototype = {
 
                     pos = JSON.parse(JSON.stringify(entry.defaultPos));
                     speed = 0;
+
+                    //display the wealth
+                    $('#wealth').text(entry.user.wealth);
 
                 } else {
                     if (speed > 2) {
