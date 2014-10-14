@@ -130,6 +130,8 @@ Slots.prototype = {
     init: function() {
         var that = this;
 
+        $('.first-info,.round-result-info').hide();
+
         // initilaixe the wheel
         this.wheel = {
             top: ~~(90 * that.ratio),
@@ -211,8 +213,8 @@ Slots.prototype = {
         });
 
         //make the wheel sound play repeatedly
-        SlotsSnds.background.addEventListener('timeupdate', function() {
-            if (that.GAME_STATUS == 1&&this.currentTime>1) {
+        SlotsSnds.background.addEventListener('ended', function() {
+            if (that.GAME_STATUS == 1) {
                 this.currentTime = 0;
                 this.play();
             }
@@ -412,63 +414,141 @@ Slots.prototype = {
         var params = entry.getQueryString();
 
         //when this works remove the default values 
-        entry.user.userId = params.usercode || 20140909194914517177;
-        entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
-        entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
-        entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
-
-        //show the avatar and nickname to the page
-        $('#nickname').text(entry.user.nickname.length > 5 ? entry.user.nickname.substr(0, 5) + '...' : entry.user.nickname);
-        $('#avatar').attr('src', entry.user.headimgurl);
-
-        //login
+        entry.user.userId = params.usercode || '20140903150431457546';
+        // entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+        // entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+        // entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
         $.ajax({
-            url: 'http://54.223.143.253:18080/sgac/thirdPartyLogin.action',
+            url: 'http://119.254.92.203:9090/game',
             data: {
-                userName: entry.user.username,
-                userId: entry.user.userId,
+                action: 'userinfo',
                 usercode: entry.user.userId
             },
             dataType: 'json',
-            success: function(res) {
-                //set the user info
-                entry.user.playerId = res.playerId;
+            success: function(zchres) {
+                entry.user.username = zchres.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+                entry.user.nickname = zchres.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+                entry.user.headimgurl = zchres.headimgurl || 'images/default_avatar.jpg';
 
-                //get inital wealth info from server
-                // unlock
+                //show the avatar and nickname to the page
+                $('#nickname').text(entry.user.nickname.length > 5 ? entry.user.nickname.substr(0, 5) + '...' : entry.user.nickname);
+                $('#avatar').attr('src', entry.user.headimgurl);
+
+                //login
                 $.ajax({
-                    url: 'http://54.223.143.253:18080/sgac/forwardList.action',
+                    url: 'http://54.223.143.253:18080/sgac/thirdPartyLogin.action',
                     data: {
-                        gameId: 90031,
-                        usercode: entry.user.userId,
-                        playerId: entry.user.playerId,
-                        roomId: 1,
-                        msgid: 20050,
-                        mid: 1020,
-                        type: 1,
-                        name: entry.user.username
+                        userName: entry.user.username,
+                        userId: entry.user.userId,
+                        usercode: entry.user.userId
                     },
                     dataType: 'json',
                     success: function(res) {
                         //set the user info
-                        entry.user.wealth = +res.tableInfo.info[0].chips;
-                        entry.user.user_info_ready = true;
-                        $('#wealth').text(entry.user.wealth);
+                        entry.user.playerId = res.playerId;
+
+                        //get inital wealth info from server
+                        // unlock
+                        $.ajax({
+                            url: 'http://54.223.143.253:18080/sgac/forwardList.action',
+                            data: {
+                                gameId: 90031,
+                                usercode: entry.user.userId,
+                                playerId: entry.user.playerId,
+                                roomId: 1,
+                                msgid: 20050,
+                                mid: 1020,
+                                type: 1,
+                                name: entry.user.username
+                            },
+                            dataType: 'json',
+                            success: function(res) {
+                                //set the user info
+                                entry.user.wealth = +res.tableInfo.info[0].chips;
+                                entry.user.user_info_ready = true;
+                                $('#wealth').text(entry.user.wealth);
+                            },
+                            error: function(err) {
+                                alert('获取用户信息失败，请检查网络');
+                            }
+                        });
                     },
                     error: function(err) {
-                        alert('获取用户信息失败，请检查网络');
+                        alert('登入失败，请重试');
                     }
                 });
+
+                //lock
+                // entry.user.wealth = 100;
+                // $('#wealth').text(entry.user.wealth);
+                // entry.user.user_info_ready = true;
             },
-            error: function(err) {
-                alert('登入失败，请重试');
+            error: function(zcherr) {
+                alert('从中彩汇获取数据失败！');
             }
         });
+
+
+        // entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+        // entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+        // entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
+
+        // //show the avatar and nickname to the page
+        // $('#nickname').text(entry.user.nickname.length > 5 ? entry.user.nickname.substr(0, 5) + '...' : entry.user.nickname);
+        // $('#avatar').attr('src', entry.user.headimgurl);
+
+        // //login
+        // $.ajax({
+        //     url: 'http://54.223.143.253:18080/sgac/thirdPartyLogin.action',
+        //     data: {
+        //         userName: entry.user.username,
+        //         userId: entry.user.userId,
+        //         usercode: entry.user.userId
+        //     },
+        //     dataType: 'json',
+        //     success: function(res) {
+        //         //set the user info
+        //         entry.user.playerId = res.playerId;
+
+        //         //get inital wealth info from server
+        //         // unlock
+        //         $.ajax({
+        //             url: 'http://54.223.143.253:18080/sgac/forwardList.action',
+        //             data: {
+        //                 gameId: 90031,
+        //                 usercode: entry.user.userId,
+        //                 playerId: entry.user.playerId,
+        //                 roomId: 1,
+        //                 msgid: 20050,
+        //                 mid: 1020,
+        //                 type: 1,
+        //                 name: entry.user.username
+        //             },
+        //             dataType: 'json',
+        //             success: function(res) {
+        //                 //set the user info
+        //                 entry.user.wealth = +res.tableInfo.info[0].chips;
+        //                 entry.user.user_info_ready = true;
+        //                 $('#wealth').text(entry.user.wealth);
+        //             },
+        //             error: function(err) {
+        //                 alert('获取用户信息失败，请检查网络');
+        //             }
+        //         });
+        //     },
+        //     error: function(err) {
+        //         alert('登入失败，请重试');
+        //     }
+        // });
 
         //lock
         // entry.user.wealth = 100;
         // $('#wealth').text(entry.user.wealth);
         // entry.user.user_info_ready = true;
+
+
+
+
     },
     getQueryString: function() {
         //helper function to get query parameters from url
@@ -518,6 +598,28 @@ Slots.prototype = {
             },
             dataType: 'json',
             success: function(res) {
+
+                //检查是否首次中奖，如果是则去中彩汇请求一些数据
+                if (res.firstWin == 1) {
+                    $.ajax({
+                        url: 'http://119.254.92.203:9090/game',
+                        data: {
+                            action: 'playresult',
+                            usercode: entry.user.userId,
+                            gametime: 0,
+                            coins: res.win,
+                            exp: 0,
+                            gamename: 'slot'
+                        },
+                        dataType: 'json',
+                        success: function(res2) {
+                            //winnings,lotteries,points之一
+                        },
+                        error: function(err2) {
+                            alert('与中彩汇通信失败，无法获取首次中奖的信息！');
+                        }
+                    });
+                }
                 setTimeout(function() {
                     entry.GAME_STATUS = 2;
                     entry.user.winBet = res.win; //产出筹码数量
@@ -640,13 +742,24 @@ Slots.prototype = {
                         //if win, draw the lines out
                         entry.GAME_STATUS = 3;
                         $('#winScore').text('$' + entry.user.winBet);
+                        //显示中奖信息
+                        $('#roundResultInfo1').show();
+                        setTimeout(function() {
+                            $('#roundResultInfo1').hide();
+                        }, 3000);
+
+                        //play the button sound
                         try {
-                            //play the button sound
                             SlotsSnds.win.currentTime = 0;
                             SlotsSnds.win.play();
                         } catch (err) {};
 
                     } else {
+                        //显示未中奖信息
+                        $('#roundResultInfo2').show();
+                        setTimeout(function() {
+                            $('#roundResultInfo2').hide();
+                        }, 3000);
                         //else end the round
                         entry.GAME_STATUS = 0;
                     }
@@ -682,7 +795,7 @@ Slots.prototype = {
                     if (v2 > 0) {
                         //line i2 got bonus, the icon count is v2
                         ctx.beginPath();
-                        ctx.lineWidth = 3;
+                        ctx.lineWidth = 5;
                         // ctx.font = '18px arial';
                         ctx.fillStyle = '#000';
                         entry.LOTERY_LINES[i2].forEach(function(v3, i3, a3) {

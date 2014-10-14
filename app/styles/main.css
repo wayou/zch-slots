@@ -9,7 +9,7 @@ body {
 #loading-wrapper {
     background-color: #15A3D5;
     text-align: center;
-    z-index: 9;
+    z-index: 99999;
     position: absolute;
     width: 100%;
 }
@@ -135,6 +135,7 @@ img.slots-body {
     position: absolute;
     left: 41%;
     top: 35px;
+    height: 50px;
 }
 #nickname {
     color: #fff;
@@ -192,12 +193,33 @@ img.slots-body {
 }
 #help {
     position: absolute;
-    right: 10px;
+    left: 2px;
     bottom: 20px;
     width:30px;
+    z-index: 999;
 }
 .pm-title {
     background: #003A54!important;
     color: #fff;
     border-bottom-width: 0px!important;
 }
+
+.lotery-result-info{
+    position: absolute;
+    right: 5px;
+    top:25px;
+}
+.first-info,.lotery-result-info{
+    /*display: none;*/
+}
+.lotery-result-info span{
+    font-size: 0.9em;
+}
+
+.lotery-result-info span.first-info{
+    color: #E7E900;
+}
+.lotery-result-info span.round-result-info{
+    color: #F05048;
+}
+
