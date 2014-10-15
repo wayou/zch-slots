@@ -428,7 +428,7 @@ Slots.prototype = {
             dataType: 'json',
             success: function(zchres) {
                 entry.user.username = zchres.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
-                entry.user.nickname = zchres.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
+                entry.user.nickname = zchres.nickName || '未知';
                 entry.user.headimgurl = zchres.headimgurl || 'images/default_avatar.jpg';
 
                 //show the avatar and nickname to the page
