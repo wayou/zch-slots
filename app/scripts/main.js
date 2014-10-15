@@ -599,10 +599,8 @@ Slots.prototype = {
             },
             dataType: 'json',
             success: function(res) {
-
                 //检查是否首次中奖，如果是则去中彩汇请求一些数据
                 if (res.firstWin == 1) {
-                    entry.game.firstWin=1;
                     $.ajax({
                         url: 'http://54.223.143.253:18080/sgac/transit.action',
                         data: {
@@ -611,18 +609,18 @@ Slots.prototype = {
                             gametime: 0,
                             coins: res.win,
                             exp: 0,
-                            gamename: 'slot'
+                            gamename: 'slots'
                         },
                         dataType: 'json',
                         success: function(res2) {
                             //winnings,lotteries,points之一
-                            if (res2.points) {
+                            if (res2.points!='0') {
                                 $('#firstInfo').text('积分:' + res2.points);
                             }
-                            if (res2.winnings) {
+                            if (res2.winnings!='0') {
                                 $('#firstInfo').text('彩金:' + res2.winnings);
                             }
-                            if (res2.lotteries) {
+                            if (res2.lotteries!='0') {
                                 $('#firstInfo').text('彩球:' + res2.lotteries);
                             }
                         },
