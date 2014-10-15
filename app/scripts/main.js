@@ -601,6 +601,7 @@ Slots.prototype = {
             success: function(res) {
                 //检查是否首次中奖，如果是则去中彩汇请求一些数据
                 if (res.firstWin == 1) {
+                    entry.game.firstWin=1;
                     $.ajax({
                         url: 'http://54.223.143.253:18080/sgac/transit.action',
                         data: {
