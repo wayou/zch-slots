@@ -100,7 +100,8 @@ var Slots = function() {
     this.game = {
         bet: 1, //1000 per line
         lineCnt: 1,
-        betRate: 1
+        betRate: 1,
+        firstWin:0
     };
     this.wheel = null;
     this.layout = []; // 15items each rank from 1~10, and item 0~2 represent the first column
@@ -414,12 +415,12 @@ Slots.prototype = {
         var params = entry.getQueryString();
 
         //when this works remove the default values 
-        entry.user.userId = params.usercode || '20140903150431457546';
+        entry.user.userId = params.usercode || '20140806154011985163';
         // entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         // entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         // entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
         $.ajax({
-            url: 'http://119.254.92.203:9090/game',
+            url: 'http://54.223.143.253:18080/sgac/transit.action',
             data: {
                 action: 'userinfo',
                 usercode: entry.user.userId
@@ -438,7 +439,7 @@ Slots.prototype = {
                 $.ajax({
                     url: 'http://54.223.143.253:18080/sgac/thirdPartyLogin.action',
                     data: {
-                        userName: entry.user.username,
+                        userName: entry.user.nickname,
                         userId: entry.user.userId,
                         usercode: entry.user.userId
                     },
@@ -459,7 +460,7 @@ Slots.prototype = {
                                 msgid: 20050,
                                 mid: 1020,
                                 type: 1,
-                                name: entry.user.username
+                                name: entry.user.nickname
                             },
                             dataType: 'json',
                             success: function(res) {
@@ -585,7 +586,7 @@ Slots.prototype = {
         $.ajax({
             url: 'http://54.223.143.253:18080/sgac/forwardList.action',
             data: {
-                name: entry.user.username,
+                name: entry.user.nickname,
                 usercode: entry.user.userId,
                 playerId: entry.user.playerId,
                 lines: $('#linesCnt').text(),
@@ -601,8 +602,9 @@ Slots.prototype = {
 
                 //检查是否首次中奖，如果是则去中彩汇请求一些数据
                 if (res.firstWin == 1) {
+                    entry.game.firstWin=1;
                     $.ajax({
-                        url: 'http://119.254.92.203:9090/game',
+                        url: 'http://54.223.143.253:18080/sgac/transit.action',
                         data: {
                             action: 'playresult',
                             usercode: entry.user.userId,
@@ -614,6 +616,15 @@ Slots.prototype = {
                         dataType: 'json',
                         success: function(res2) {
                             //winnings,lotteries,points之一
+                            if (res2.points) {
+                                $('#firstInfo').text('积分:' + res2.points);
+                            }
+                            if (res2.winnings) {
+                                $('#firstInfo').text('彩金:' + res2.winnings);
+                            }
+                            if (res2.lotteries) {
+                                $('#firstInfo').text('彩球:' + res2.lotteries);
+                            }
                         },
                         error: function(err2) {
                             alert('与中彩汇通信失败，无法获取首次中奖的信息！');
@@ -757,8 +768,13 @@ Slots.prototype = {
                     } else {
                         //显示未中奖信息
                         $('#roundResultInfo2').show();
+                        if(entry.game.firstWin==1){
+                            $('.first-info').show();
+                            entry.game.firstWin=0;
+                        }
                         setTimeout(function() {
                             $('#roundResultInfo2').hide();
+                            $('.first-info').hide();
                         }, 3000);
                         //else end the round
                         entry.GAME_STATUS = 0;
