@@ -85,7 +85,7 @@ var Slots = function() {
     this.user = {
         usercode: 0,
         username: '未知',
-        nikename: '未知',
+        nickname: '未知',
         playerId: 0,
         userId: 0,
         headimgurl: 'images/default_avatar.jpg',
@@ -428,7 +428,7 @@ Slots.prototype = {
             dataType: 'json',
             success: function(zchres) {
                 entry.user.username = zchres.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
-                entry.user.nickname = zchres.nickName || '未知';
+                entry.user.nickname = zchres.nikeName || '未知';
                 entry.user.headimgurl = zchres.headimgurl || 'images/default_avatar.jpg';
 
                 //show the avatar and nickname to the page
