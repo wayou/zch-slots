@@ -192,7 +192,6 @@ Slots.prototype = {
                     SlotsSnds.btn.currentTime = 0;
                     SlotsSnds.btn.play();
                 } catch (err) {
-                    alert('play sound failed!');
                 };
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
@@ -293,19 +292,21 @@ Slots.prototype = {
                 },
                 dataType: 'json',
                 success: function(res) {
-                    var rankData = res;
+                    var rankData = res,
+                    collectionData=rankData.rankList.slice(0,10);
                     //获取数据成功，显示排行榜
                     var rankContent = '<div class="rank-container"><table class="rank-table">'
-                    rankData.rankList.forEach(function(v, i, a) {
+                    collectionData.forEach(function(v, i, a) {
                         rankContent += '<tr>' +
                             '<td class="rank-cnt-col"> ' + (+i + 1) + ' </td>' +
                         // '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
-                        '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
+                        '<td class="rank-user-col"> <span class="rank-nickname">' + (collectionData[i].name.length > 30 ?(collectionData[i].name.substr(0, 27)+'...'):collectionData[i].name) + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
                         // '<td class="rank-trend-col">' +
                         // '<img src="../images/rank_equal.png" alt="">' +
                         // '</td>' +
                         '</tr>';
                     });
+
                     rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
                     $.pgwModal({
                         title: '排行榜',
