@@ -101,7 +101,7 @@ var Slots = function() {
         bet: 1, //1000 per line
         lineCnt: 1,
         betRate: 1,
-        firstWin:0
+        firstWin: 0
     };
     this.wheel = null;
     this.layout = []; // 15items each rank from 1~10, and item 0~2 represent the first column
@@ -601,7 +601,7 @@ Slots.prototype = {
             success: function(res) {
                 //检查是否首次中奖，如果是则去中彩汇请求一些数据
                 if (res.firstWin == 1) {
-                    entry.game.firstWin=1;
+                    entry.game.firstWin = 1;
                     $.ajax({
                         url: 'http://54.223.143.253:18080/sgac/transit.action',
                         data: {
@@ -615,13 +615,13 @@ Slots.prototype = {
                         dataType: 'json',
                         success: function(res2) {
                             //winnings,lotteries,points之一
-                            if (res2.points!='0') {
+                            if (res2.points != '0') {
                                 $('#firstInfo').text('积分:' + res2.points);
                             }
-                            if (res2.winnings!='0') {
+                            if (res2.winnings != '0') {
                                 $('#firstInfo').text('彩金:' + res2.winnings);
                             }
-                            if (res2.lotteries!='0') {
+                            if (res2.lotteries != '0') {
                                 $('#firstInfo').text('彩球:' + res2.lotteries);
                             }
                         },
@@ -754,8 +754,13 @@ Slots.prototype = {
                         $('#winScore').text('$' + entry.user.winBet);
                         //显示中奖信息
                         $('#roundResultInfo1').show();
+                        if (entry.game.firstWin == 1) {
+                            $('.first-info').show();
+                            entry.game.firstWin = 0;
+                        }
                         setTimeout(function() {
                             $('#roundResultInfo1').hide();
+                            $('.first-info').hide();
                         }, 3000);
 
                         //play the button sound
@@ -767,13 +772,8 @@ Slots.prototype = {
                     } else {
                         //显示未中奖信息
                         $('#roundResultInfo2').show();
-                        if(entry.game.firstWin==1){
-                            $('.first-info').show();
-                            entry.game.firstWin=0;
-                        }
                         setTimeout(function() {
                             $('#roundResultInfo2').hide();
-                            $('.first-info').hide();
                         }, 3000);
                         //else end the round
                         entry.GAME_STATUS = 0;
