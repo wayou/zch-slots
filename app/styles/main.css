@@ -37,7 +37,7 @@ body {
 .score-info .score-panel-img {
     width: 50%;
     position: relative;
-    top: 32%;
+    top: 25%;
     /*top: 42%;*/
 }
 #rankBoard {
@@ -76,6 +76,7 @@ img.slots-body {
     z-index: 999;
 }
 .userbet-panel {
+    height: 75px;/*new add*/
     background-image: url('../images/playerInfoBk.png');
     background-size: cover;
 }
@@ -135,7 +136,7 @@ img.slots-body {
     position: absolute;
     left: 41%;
     top: 35px;
-    height: 50px;
+    /*height: 50px;*/
 }
 #nickname {
     color: #fff;

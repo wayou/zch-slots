@@ -185,31 +185,34 @@ Slots.prototype = {
 
         // listen the spin button 
         this.$spinBtn.on('tap click', function() {
-            try {
-                //play the button sound
-                SlotsSnds.btn.currentTime = 0;
-                SlotsSnds.btn.play();
-            } catch (err) {};
 
-            if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
-                alert('金钱不够哦~');
-                return;
-            }
-
-            if (that.checkValidation(that)) {
-                //here we go 
-                console.info('game start!');
+            if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 try {
                     //play the button sound
                     SlotsSnds.btn.currentTime = 0;
                     SlotsSnds.btn.play();
-                    //play the background sound
-                    SlotsSnds.background.currentTime = 0;
-                    SlotsSnds.background.play();
                 } catch (err) {};
-                that.spin(that);
-            } else {
-                console.log('game is running');
+
+                if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
+                    alert('金钱不够哦~');
+                    return;
+                }
+
+                if (that.checkValidation(that)) {
+                    //here we go 
+                    console.info('game start!');
+                    try {
+                        //play the button sound
+                        SlotsSnds.btn.currentTime = 0;
+                        SlotsSnds.btn.play();
+                        //play the background sound
+                        SlotsSnds.background.currentTime = 0;
+                        SlotsSnds.background.play();
+                    } catch (err) {};
+                    that.spin(that);
+                } else {
+                    console.log('game is running');
+                }
             }
         });
 
@@ -222,37 +225,45 @@ Slots.prototype = {
         }, false);
 
         this.$mkBetBtn.on('tap click', function() {
-            var $cntHolder = $('#betPerLineCnt'),
-                originalCnt = +$cntHolder.text();
-            if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)) {
-                originalCnt += 10;
+
+            if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
+                var $cntHolder = $('#betPerLineCnt'),
+                    originalCnt = +$cntHolder.text();
+                if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)) {
+                    originalCnt += 10;
+                }
+                $cntHolder.text(originalCnt);
+                that.game.bet = originalCnt;
+                that.$totalBet.text(originalCnt * (+$('#linesCnt').text()));
+                // $('#wealth').text(that.user.wealth - originalCnt * (+$('#linesCnt').text()));
             }
-            $cntHolder.text(originalCnt);
-            that.game.bet = originalCnt;
-            that.$totalBet.text(originalCnt * (+$('#linesCnt').text()));
-            // $('#wealth').text(that.user.wealth - originalCnt * (+$('#linesCnt').text()));
+
         });
         this.$betLineBtn.on('tap click', function() {
-            var $cntHolder = $('#linesCnt'),
-                originalCnt = +$cntHolder.text();
-            if (originalCnt < 9 && ((originalCnt + 1) * (+$('#betPerLineCnt').text()) < that.user.wealth)) {
-                originalCnt++;
-            } else {
-                originalCnt = 1;
+            if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
+                var $cntHolder = $('#linesCnt'),
+                    originalCnt = +$cntHolder.text();
+                if (originalCnt < 9 && ((originalCnt + 1) * (+$('#betPerLineCnt').text()) < that.user.wealth)) {
+                    originalCnt++;
+                } else {
+                    originalCnt = 1;
+                }
+                that.game.lineCnt = originalCnt;
+                $cntHolder.text(originalCnt);
+                that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
+                // $('#wealth').text(that.user.wealth - originalCnt * (+$('#betPerLineCnt').text()));
             }
-            that.game.lineCnt = originalCnt;
-            $cntHolder.text(originalCnt);
-            that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
-            // $('#wealth').text(that.user.wealth - originalCnt * (+$('#betPerLineCnt').text()));
         });
 
         //play sound when button clicked
         $('.slots-btn').on('click', function() {
-            try {
-                //play the button sound
-                SlotsSnds.btn.currentTime = 0;
-                SlotsSnds.btn.play();
-            } catch (err) {};
+            if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
+                try {
+                    //play the button sound
+                    SlotsSnds.btn.currentTime = 0;
+                    SlotsSnds.btn.play();
+                } catch (err) {};
+            }
         });
 
         $('#help').on('click', function() {
@@ -415,7 +426,7 @@ Slots.prototype = {
         var params = entry.getQueryString();
 
         //when this works remove the default values 
-        entry.user.userId = params.usercode || '20140806154011985163';
+        entry.user.userId = params.usercode || '20141016205157252083';
         // entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         // entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         // entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
@@ -430,7 +441,6 @@ Slots.prototype = {
                 entry.user.username = zchres.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
                 entry.user.nickname = zchres.nikeName || '未知';
                 entry.user.headimgurl = zchres.headimgurl || 'images/default_avatar.jpg';
-
                 //show the avatar and nickname to the page
                 $('#nickname').text(entry.user.nickname.length > 5 ? entry.user.nickname.substr(0, 5) + '...' : entry.user.nickname);
                 $('#avatar').attr('src', entry.user.headimgurl);
