@@ -192,6 +192,7 @@ Slots.prototype = {
                     SlotsSnds.btn.currentTime = 0;
                     SlotsSnds.btn.play();
                 } catch (err) {
+                    console.log(JSON.stringify(err));
                 };
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
@@ -257,7 +258,7 @@ Slots.prototype = {
         });
 
         //play sound when button clicked
-        $('.slots-btn').on('click', function() {
+        $('.slots-btn').on('tap click', function() {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 try {
                     //play the button sound
@@ -267,7 +268,7 @@ Slots.prototype = {
             }
         });
 
-        $('#help').on('click', function() {
+        $('#help').on('tap click', function() {
             $.pgwModal({
                 title: '倍率表',
                 titleBar: false,
@@ -300,7 +301,7 @@ Slots.prototype = {
                         rankContent += '<tr>' +
                             '<td class="rank-cnt-col"> ' + (+i + 1) + ' </td>' +
                         // '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
-                        '<td class="rank-user-col"> <span class="rank-nickname">' + (collectionData[i].name.length > 30 ?(collectionData[i].name.substr(0, 27)+'...'):collectionData[i].name) + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
+                        '<td class="rank-user-col"> <span class="rank-nickname">' + (collectionData[i].name.length > 25 ?(collectionData[i].name.substr(0, 22)+'...'):collectionData[i].name) + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
                         // '<td class="rank-trend-col">' +
                         // '<img src="../images/rank_equal.png" alt="">' +
                         // '</td>' +
