@@ -650,6 +650,8 @@ Slots.prototype = {
                 }, 7000);
             },
             error: function(err) {
+                entry.GAME_STATUS = 2;
+                entry.user.winBet = 0; //产出筹码数量
                 alert('获取中奖结果出错，请检查网络');
             }
         });
