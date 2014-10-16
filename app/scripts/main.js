@@ -191,7 +191,9 @@ Slots.prototype = {
                     //play the button sound
                     SlotsSnds.btn.currentTime = 0;
                     SlotsSnds.btn.play();
-                } catch (err) {};
+                } catch (err) {
+                    alert('play sound failed!');
+                };
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
                     alert('金钱不够哦~');
