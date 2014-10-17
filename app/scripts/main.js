@@ -192,7 +192,6 @@ Slots.prototype = {
                     SlotsSnds.btn.currentTime = 0;
                     SlotsSnds.btn.play();
                 } catch (err) {
-                    alert(JSON.stringify(err));
                 };
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
