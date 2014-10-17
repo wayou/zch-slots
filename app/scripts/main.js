@@ -196,7 +196,7 @@ Slots.prototype = {
                 };
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
-                    alert('金钱不够哦~');
+                    alert('金钱不够哦~明天再来吧');
                     return;
                 }
 
