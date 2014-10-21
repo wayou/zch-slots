@@ -23,7 +23,6 @@
 // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
 
 // MIT license
-
 (function() {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -141,8 +140,8 @@ Slots.prototype = {
             width: ~~(90 * that.ratio),
             height: ~~(240 * that.ratio),
             gutter: ~~(5 * that.ratio),
-            canvasWidth: ~~(455 * that.ratio*this.deviceRadio),
-            canvasHeight: ~~(240 * that.ratio*this.deviceRadio),
+            canvasWidth: ~~(455 * that.ratio),
+            canvasHeight: ~~(240 * that.ratio),
             itemWidth: ~~(that.itemSize.width * that.ratio),
             itemHeight: (~~that.itemSize.height * that.ratio)
         };
