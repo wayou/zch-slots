@@ -124,6 +124,7 @@ var Slots = function() {
     ];
     this.holderImg = new Image();
     this.holderImg.src = 'images/holder.jpg';
+    this.deviceRadio=window.devicePixelRatio||1;
 };
 
 Slots.prototype = {
@@ -140,8 +141,8 @@ Slots.prototype = {
             width: ~~(90 * that.ratio),
             height: ~~(240 * that.ratio),
             gutter: ~~(5 * that.ratio),
-            canvasWidth: ~~(455 * that.ratio),
-            canvasHeight: ~~(240 * that.ratio),
+            canvasWidth: ~~(455 * that.ratio*this.deviceRadio),
+            canvasHeight: ~~(240 * that.ratio*this.deviceRadio),
             itemWidth: ~~(that.itemSize.width * that.ratio),
             itemHeight: (~~that.itemSize.height * that.ratio)
         };
