@@ -123,7 +123,6 @@ var Slots = function() {
     ];
     this.holderImg = new Image();
     this.holderImg.src = 'images/holder.jpg';
-    this.deviceRadio=window.devicePixelRatio||1;
 };
 
 Slots.prototype = {
