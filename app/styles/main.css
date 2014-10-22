@@ -38,7 +38,8 @@ body {
 .score-info .score-panel-img {
     width: 50%;
     position: relative;
-    top: 30%;
+    top: 26%;
+    /*top: 30%;*/
     /*top: 42%;*/
 }
 #rankBoard {
