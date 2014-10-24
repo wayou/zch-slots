@@ -627,15 +627,17 @@ Slots.prototype = {
                         dataType: 'json',
                         success: function(res2) {
                             //winnings,lotteries,points之一
-                            if (res2.points != '0') {
-                                $('#firstInfo').text('积分:' + res2.points);
-                            }
-                            if (res2.winnings != '0') {
-                                $('#firstInfo').text('彩金:' + res2.winnings);
-                            }
-                            if (res2.lotteries != '0') {
-                                $('#firstInfo').text('彩球:' + res2.lotteries);
-                            }
+                            // if (res2.points != '0') {
+                            //     $('#firstInfo').text('积分:' + res2.points);
+                            // }
+                            $('#firstInfo').text('彩金:' + res2.winnings);
+
+                            // if (res2.winnings != '0') {
+                            //     $('#firstInfo').text('彩金:' + res2.winnings);
+                            // }
+                            // if (res2.lotteries != '0') {
+                            //     $('#firstInfo').text('彩球:' + res2.lotteries);
+                            // }
                         },
                         error: function(err2) {
                             alert('与中彩汇通信失败，无法获取首次中奖的信息！');
