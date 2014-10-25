@@ -50,8 +50,8 @@
 
 //the main slot class
 var Slots = function() {
-    this.WINDOW_WIDTH = window.outerWidth;
-    this.WINDOW_HEIGHT = window.outerHeight;
+    this.WINDOW_WIDTH = screen.width;
+    this.WINDOW_HEIGHT = screen.height;
     this.COLORS = ['#FAFA17', '#ff1493', '#adff2f', '#c617e8', '#F1753F', '#ffffff', '#E9282F', '#55BEED', '#EA2830'];
     this.bodyImagesSize = {
         width: 640,
@@ -171,8 +171,6 @@ Slots.prototype = {
 
         //generate a random layout for icons
         this.layout = this.getRandomLayout(that);
-        //debug
-        debug.log('layout:'+this.layout);
 
         //load user data
         this.getUserData(that);
@@ -395,8 +393,6 @@ Slots.prototype = {
             top: entry.wheel.top,
             left: entry.wheel.left
         });
-        //debug
-        debug.log('canvas width:'+entry.wheel.canvasWidth);
 
     },
     checkValidation: function(entry) {
@@ -421,8 +417,6 @@ Slots.prototype = {
             };
             entry.items.icons[i].src = 'images/items/' + i + '.png';
         }
-        //debug
-        debug.log('icons loaded');
     },
     getUserData: function(entry) {
 
@@ -860,10 +854,9 @@ var SlotsSnds = {
 
 //invoke our game
 $(function() {
-    $('.main-wrapper').height(window.outerHeight);
+    $('.main-wrapper').height(screen.height);
     //debug
-    debug.log('innerWidth:'+window.innerWidth+',outerWidth:'+window.outerWidth);
-    debug.log('innerHeight:'+window.innerHeight+',outerHeight:'+window.outerHeight);
+    debug.log('screenwidth:'+screen.width+',screenheight:'+screen.height);
     var zchSlots = new Slots();
     zchSlots.init();
 });
