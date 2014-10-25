@@ -50,8 +50,8 @@
 
 //the main slot class
 var Slots = function() {
-    this.WINDOW_WIDTH = screen.width;
-    this.WINDOW_HEIGHT = screen.height;
+    this.WINDOW_WIDTH = window.innerWidth;
+    this.WINDOW_HEIGHT = window.innerHeight;
     this.COLORS = ['#FAFA17', '#ff1493', '#adff2f', '#c617e8', '#F1753F', '#ffffff', '#E9282F', '#55BEED', '#EA2830'];
     this.bodyImagesSize = {
         width: 640,
@@ -186,8 +186,7 @@ Slots.prototype = {
                     //play the button sound
                     SlotsSnds.btn.currentTime = 0;
                     SlotsSnds.btn.play();
-                } catch (err) {
-                };
+                } catch (err) {};
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
                     alert('金钱不够哦~明天再来吧');
@@ -288,14 +287,14 @@ Slots.prototype = {
                 dataType: 'json',
                 success: function(res) {
                     var rankData = res,
-                    collectionData=rankData.rankList.slice(0,10);
+                        collectionData = rankData.rankList.slice(0, 10);
                     //获取数据成功，显示排行榜
                     var rankContent = '<div class="rank-container"><table class="rank-table">'
                     collectionData.forEach(function(v, i, a) {
                         rankContent += '<tr>' +
                             '<td class="rank-cnt-col"> ' + (+i + 1) + ' </td>' +
                         // '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
-                        '<td class="rank-user-col"> <span class="rank-nickname">' + (collectionData[i].name.length > 25 ?(collectionData[i].name.substr(0, 22)+'...'):collectionData[i].name) + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
+                        '<td class="rank-user-col"> <span class="rank-nickname">' + (collectionData[i].name.length > 25 ? (collectionData[i].name.substr(0, 22) + '...') : collectionData[i].name) + '</span> <br> <span>' + rankData.rankList[i].content + '</span> </td>' +
                         // '<td class="rank-trend-col">' +
                         // '<img src="../images/rank_equal.png" alt="">' +
                         // '</td>' +
@@ -854,9 +853,10 @@ var SlotsSnds = {
 
 //invoke our game
 $(function() {
-    $('.main-wrapper').height(screen.height);
-    //debug
-    debug.log('screenwidth:'+screen.width+',screenheight:'+screen.height);
-    var zchSlots = new Slots();
-    zchSlots.init();
+    //in order to get the right device size, we wrap all code into settimout scope
+    setTimeout(function() {
+        $('.main-wrapper').height(window.innerHeight);
+        var zchSlots = new Slots();
+        zchSlots.init();
+    }, 150);
 });
