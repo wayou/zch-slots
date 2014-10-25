@@ -861,7 +861,9 @@ var SlotsSnds = {
 //invoke our game
 $(function() {
     $('.main-wrapper').height(window.outerHeight);
-
+    //debug
+    debug.log('innerWidth:'+window.innerWidth+',outerWidth:'+window.outerWidth);
+    debug.log('innerHeight:'+window.innerHeight+',outerHeight:'+window.outerHeight);
     var zchSlots = new Slots();
     zchSlots.init();
 });
