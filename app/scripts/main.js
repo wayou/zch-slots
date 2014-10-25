@@ -11,10 +11,6 @@
  *wheelCanvasWidth 540-85=455
  **/
 
-//display the splash screen
-//to be remove
-// $('#loading-wrapper').height(window.innerHeight);
-
 //the following is a polyfill of the requestAnimationFrame I copied from Paul Irish's gist
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
