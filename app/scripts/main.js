@@ -50,8 +50,8 @@
 
 //the main slot class
 var Slots = function() {
-    this.WINDOW_WIDTH = window.innerWidth;
-    this.WINDOW_HEIGHT = window.innerHeight;
+    this.WINDOW_WIDTH = window.outerWidth;
+    this.WINDOW_HEIGHT = window.outerHeight;
     this.COLORS = ['#FAFA17', '#ff1493', '#adff2f', '#c617e8', '#F1753F', '#ffffff', '#E9282F', '#55BEED', '#EA2830'];
     this.bodyImagesSize = {
         width: 640,
@@ -860,7 +860,7 @@ var SlotsSnds = {
 
 //invoke our game
 $(function() {
-    $('.main-wrapper').height(window.innerHeight);
+    $('.main-wrapper').height(window.outerHeight);
 
     var zchSlots = new Slots();
     zchSlots.init();
