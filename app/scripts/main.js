@@ -176,7 +176,7 @@ Slots.prototype = {
         //generate a random layout for icons
         this.layout = this.getRandomLayout(that);
         //debug
-        debug.log(this.layout);
+        debug.log('layout:'+this.layout);
 
         //load user data
         this.getUserData(that);
@@ -400,7 +400,7 @@ Slots.prototype = {
             left: entry.wheel.left
         });
         //debug
-        debug.log(entry.wheel.canvasWidth);
+        debug.log('canvas width:'+entry.wheel.canvasWidth);
 
     },
     checkValidation: function(entry) {
