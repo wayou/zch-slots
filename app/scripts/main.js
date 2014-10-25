@@ -175,6 +175,8 @@ Slots.prototype = {
 
         //generate a random layout for icons
         this.layout = this.getRandomLayout(that);
+        //debug
+        debug.log(this.layout);
 
         //load user data
         this.getUserData(that);
@@ -423,6 +425,8 @@ Slots.prototype = {
             };
             entry.items.icons[i].src = 'images/items/' + i + '.png';
         }
+        //debug
+        debug.log('icons loaded');
     },
     getUserData: function(entry) {
 
