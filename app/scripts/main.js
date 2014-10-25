@@ -397,6 +397,8 @@ Slots.prototype = {
             top: entry.wheel.top,
             left: entry.wheel.left
         });
+        //debug
+        debug.log(entry.wheel.canvasWidth);
 
     },
     checkValidation: function(entry) {

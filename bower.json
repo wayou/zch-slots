@@ -5,5 +5,7 @@
     "zepto": "~1.1.4",
     "pgwmodal": "~2.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "binnng/debug.js": "*"
+  }
 }
