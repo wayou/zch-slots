@@ -11,6 +11,13 @@
  *wheelCanvasWidth 540-85=455
  **/
 
+
+ // the sound cannot play on ios6/iphone5
+ // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
+// the device size issue
+// http://stackoverflow.com/questions/10610743/android-browsers-screen-width-screen-height-window-innerwidth-window-inner
+
+
 //the following is a polyfill of the requestAnimationFrame I copied from Paul Irish's gist
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
