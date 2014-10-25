@@ -6,6 +6,5 @@
     "pgwmodal": "~2.0.0"
   },
   "devDependencies": {
-    "binnng/debug.js": "*"
   }
 }
