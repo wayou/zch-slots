@@ -12,8 +12,8 @@
  **/
 
 
- // the sound cannot play on ios6/iphone5
- // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
+// the sound cannot play on ios6/iphone5
+// http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
 // the device size issue
 // http://stackoverflow.com/questions/10610743/android-browsers-screen-width-screen-height-window-innerwidth-window-inner
 
@@ -189,11 +189,13 @@ Slots.prototype = {
         this.$spinBtn.on('tap click', function() {
 
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
-                try {
-                    //play the button sound
-                    SlotsSnds.btn.currentTime = 0;
-                    SlotsSnds.btn.play();
-                } catch (err) {};
+                // try {
+                //     //play the button sound
+                //     SlotsSnds.btn.currentTime = 0;
+                //     SlotsSnds.btn.play();
+                // } catch (err) {};
+
+                // player.plaBtn();
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
                     alert('金钱不够哦~明天再来吧');
@@ -203,14 +205,18 @@ Slots.prototype = {
                 if (that.checkValidation(that)) {
                     //here we go 
                     console.info('game start!');
-                    try {
-                        //play the button sound
-                        SlotsSnds.btn.currentTime = 0;
-                        SlotsSnds.btn.play();
-                        //play the background sound
-                        SlotsSnds.background.currentTime = 0;
-                        SlotsSnds.background.play();
-                    } catch (err) {};
+                    // try {
+                    //     //play the button sound
+                    //     SlotsSnds.btn.currentTime = 0;
+                    //     SlotsSnds.btn.play();
+                    //     //play the background sound
+                    //     SlotsSnds.background.currentTime = 0;
+                    //     SlotsSnds.background.play();
+                    // } catch (err) {};
+
+                    player.playBackground();
+
+
                     that.spin(that);
                 } else {
                     console.log('game is running');
@@ -219,12 +225,12 @@ Slots.prototype = {
         });
 
         //make the wheel sound play repeatedly
-        SlotsSnds.background.addEventListener('ended', function() {
-            if (that.GAME_STATUS == 1) {
-                this.currentTime = 0;
-                this.play();
-            }
-        }, false);
+        // SlotsSnds.background.addEventListener('ended', function() {
+        //     if (that.GAME_STATUS == 1) {
+        //         this.currentTime = 0;
+        //         this.play();
+        //     }
+        // }, false);
 
         this.$mkBetBtn.on('tap click', function() {
 
@@ -260,11 +266,12 @@ Slots.prototype = {
         //play sound when button clicked
         $('.slots-btn').on('tap click', function() {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
-                try {
-                    //play the button sound
-                    SlotsSnds.btn.currentTime = 0;
-                    SlotsSnds.btn.play();
-                } catch (err) {};
+                // try {
+                //     //play the button sound
+                //     SlotsSnds.btn.currentTime = 0;
+                //     SlotsSnds.btn.play();
+                // } catch (err) {};
+                player.plaBtn();
             }
         });
 
@@ -782,10 +789,11 @@ Slots.prototype = {
                         }, 3000);
 
                         //play the button sound
-                        try {
-                            SlotsSnds.win.currentTime = 0;
-                            SlotsSnds.win.play();
-                        } catch (err) {};
+                        // try {
+                        //     SlotsSnds.win.currentTime = 0;
+                        //     SlotsSnds.win.play();
+                        // } catch (err) {};
+                        player.playWin();
 
                     } else {
                         //显示未中奖信息
@@ -798,7 +806,7 @@ Slots.prototype = {
                     }
 
                     //end the roll sound
-                    SlotsSnds.background.pause();
+                    // SlotsSnds.background.pause();
 
                     pos = JSON.parse(JSON.stringify(entry.defaultPos));
                     speed = 0;
@@ -857,6 +865,40 @@ var SlotsSnds = {
     background: new Audio('sounds/background.mp3'),
     btn: new Audio('sounds/ui_Buttons.mp3')
 };
+
+
+// 初始化一个MuPlayer的实例。注意，我们默认使用了_mu全局命名空间。
+var player = new _mu.Player({
+    // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
+    baseDir: 'sounds/'
+});
+
+player.add('sounds/slots_win_fruit_00.mp3');
+player.add('sounds/background.mp3');
+player.add('sounds/ui_Buttons.mp3');
+
+player.playWin = function() {
+    player.setCur('sounds/slots_win_fruit_00.mp3');
+    player.play();
+    setTimeout(function() {
+        player.stop();
+    }, 500);
+}
+player.playBackground = function() {
+    player.setCur('sounds/background.mp3');
+    player.play();
+    setTimeout(function() {
+        player.stop();
+    }, 7000);
+}
+
+player.playBtn = function() {
+    player.setCur('sounds/ui_Buttons.mp3');
+    player.play();
+    setTimeout(function() {
+        player.stop();
+    }, 500);
+}
 
 //invoke our game
 $(function() {
