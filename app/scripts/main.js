@@ -216,7 +216,6 @@ Slots.prototype = {
 
                     player2.playBackground();
 
-
                     that.spin(that);
                 } else {
                     console.log('game is running');
@@ -798,11 +797,11 @@ Slots.prototype = {
     }
 };
 
-var SlotsSnds = {
-    win: new Audio('sounds/slots_win_fruit_00.mp3'),
-    background: new Audio('sounds/background.mp3'),
-    btn: new Audio('sounds/ui_Buttons.mp3')
-};
+// var SlotsSnds = {
+//     win: new Audio('sounds/slots_win_fruit_00.mp3'),
+//     background: new Audio('sounds/background.mp3'),
+//     btn: new Audio('sounds/ui_Buttons.mp3')
+// };
 
 
 // 初始化一个MuPlayer的实例。注意，我们默认使用了_mu全局命名空间。
