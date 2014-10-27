@@ -195,7 +195,7 @@ Slots.prototype = {
                 //     SlotsSnds.btn.play();
                 // } catch (err) {};
 
-                // player.plaBtn();
+                player.playBtn();
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
                     alert('金钱不够哦~明天再来吧');
@@ -214,7 +214,7 @@ Slots.prototype = {
                     //     SlotsSnds.background.play();
                     // } catch (err) {};
 
-                    player.playBackground();
+                    player2.playBackground();
 
 
                     that.spin(that);
@@ -235,6 +235,7 @@ Slots.prototype = {
         this.$mkBetBtn.on('tap click', function() {
 
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
+                player.playBtn();
                 var $cntHolder = $('#betPerLineCnt'),
                     originalCnt = +$cntHolder.text();
                 if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)) {
@@ -249,6 +250,7 @@ Slots.prototype = {
         });
         this.$betLineBtn.on('tap click', function() {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
+                player.playBtn();
                 var $cntHolder = $('#linesCnt'),
                     originalCnt = +$cntHolder.text();
                 if (originalCnt < 9 && ((originalCnt + 1) * (+$('#betPerLineCnt').text()) < that.user.wealth)) {
@@ -264,16 +266,16 @@ Slots.prototype = {
         });
 
         //play sound when button clicked
-        $('.slots-btn').on('tap click', function() {
-            if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
-                // try {
-                //     //play the button sound
-                //     SlotsSnds.btn.currentTime = 0;
-                //     SlotsSnds.btn.play();
-                // } catch (err) {};
-                player.plaBtn();
-            }
-        });
+        // $('.slots-btn').on('tap click', function() {
+        //     if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
+        //         // try {
+        //         //     //play the button sound
+        //         //     SlotsSnds.btn.currentTime = 0;
+        //         //     SlotsSnds.btn.play();
+        //         // } catch (err) {};
+        //         player.playBtn();
+        //     }
+        // });
 
         $('#help').on('tap click', function() {
             $.pgwModal({
@@ -325,70 +327,6 @@ Slots.prototype = {
                     //alert("获取排行榜数据失败！");
                 }
             });
-
-
-            //lock
-            // rankData = {
-            //     selfRank: 2,
-            //     rankList: [{
-            //         name: 'tom',
-            //         playerId: 1,
-            //         rank: 1
-            //     }, {
-            //         name: 'tom2',
-            //         playerId: 2,
-            //         rank: 2
-            //     }, {
-            //         name: 'tom3',
-            //         playerId: 3,
-            //         rank: 3
-            //     }, {
-            //         name: 'tom4',
-            //         playerId: 4,
-            //         rank: 4
-            //     }, {
-            //         name: 'tom5',
-            //         playerId: 5,
-            //         rank: 5
-            //     }, {
-            //         name: 'tom6',
-            //         playerId: 6,
-            //         rank: 6
-            //     }, {
-            //         name: 'tom7',
-            //         playerId: 7,
-            //         rank: 7
-            //     }, {
-            //         name: 'tom8',
-            //         playerId: 8,
-            //         rank: 8
-            //     }, {
-            //         name: 'tom9',
-            //         playerId: 9,
-            //         rank: 9
-            //     }, {
-            //         name: 'tom10',
-            //         playerId: 10,
-            //         rank: 0
-            //     }]
-            // };
-            // var rankContent = '<div class="rank-container"><table class="rank-table">';
-            // rankData.rankList.forEach(function(v, i, a) {
-            //     rankContent += '<tr>' +
-            //         '<td class="rank-cnt-col"> ' + (i + 1) + ' </td>' +
-            //         '<td class="rank-avatar-col"> <img src="images/default_avatar.jpg" alt="" class="rank-avatar"> </td>' +
-            //         '<td class="rank-user-col"> <span class="rank-nickname">' + rankData.rankList[i].name + '</span> <br> <span>$999</span> </td>' +
-            //         // '<td class="rank-trend-col">' +
-            //         // '<img src="images/rank_equal.png" alt="">' +
-            //         // '</td>' +
-            //         '</tr>';
-            // });
-            // rankContent += '</table><div class="mine-rank"><span>我的排名：' + rankData.selfRank + '</span></div></div>';
-            // $.pgwModal({
-            //     title: '排行榜',
-            //     content: rankContent
-            // });
-
         });
     },
     getRandomLayout: function(entry) {
@@ -870,11 +808,19 @@ var SlotsSnds = {
 // 初始化一个MuPlayer的实例。注意，我们默认使用了_mu全局命名空间。
 var player = new _mu.Player({
     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
-    baseDir: 'sounds/'
+    baseDir: 'sounds/',
+    mode:'single',
+    singleton:false
+});
+var player2 = new _mu.Player({
+    // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
+    baseDir: 'sounds/',
+    mode:'single',
+    singleton:false
 });
 
 player.add('sounds/slots_win_fruit_00.mp3');
-player.add('sounds/background.mp3');
+player2.add('sounds/background.mp3');
 player.add('sounds/ui_Buttons.mp3');
 
 player.playWin = function() {
@@ -882,13 +828,13 @@ player.playWin = function() {
     player.play();
     setTimeout(function() {
         player.stop();
-    }, 500);
+    }, 300);
 }
-player.playBackground = function() {
-    player.setCur('sounds/background.mp3');
-    player.play();
+player2.playBackground = function() {
+    player2.setCur('sounds/background.mp3');
+    player2.play();
     setTimeout(function() {
-        player.stop();
+        player2.stop();
     }, 7000);
 }
 
@@ -897,7 +843,7 @@ player.playBtn = function() {
     player.play();
     setTimeout(function() {
         player.stop();
-    }, 500);
+    }, 100);
 }
 
 //invoke our game
