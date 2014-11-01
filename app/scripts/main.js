@@ -195,7 +195,8 @@ Slots.prototype = {
                 //     SlotsSnds.btn.play();
                 // } catch (err) {};
 
-                player.playBtn();
+                // player.playBtn();
+                btnPlayer.play();
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
                     alert('金钱不够哦~明天再来吧');
@@ -214,7 +215,8 @@ Slots.prototype = {
                     //     SlotsSnds.background.play();
                     // } catch (err) {};
 
-                    player2.playBackground();
+                    // player2.playBackground();
+                    backPlayer.play();
 
                     that.spin(that);
                 } else {
@@ -234,7 +236,9 @@ Slots.prototype = {
         this.$mkBetBtn.on('tap click', function() {
 
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
-                player.playBtn();
+                // player.playBtn()
+                btnPlayer.play();
+
                 var $cntHolder = $('#betPerLineCnt'),
                     originalCnt = +$cntHolder.text();
                 if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)) {
@@ -249,7 +253,9 @@ Slots.prototype = {
         });
         this.$betLineBtn.on('tap click', function() {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
-                player.playBtn();
+                // player.playBtn()
+                btnPlayer.play();
+                
                 var $cntHolder = $('#linesCnt'),
                     originalCnt = +$cntHolder.text();
                 if (originalCnt < 9 && ((originalCnt + 1) * (+$('#betPerLineCnt').text()) < that.user.wealth)) {
@@ -597,6 +603,7 @@ Slots.prototype = {
                     entry.layout = res.wheelTable; //中奖数据
                     entry.linesInfo = res.linesInfo; //每条线中奖情况
                     console.log(entry.linesInfo, entry.layout);
+                    backPlayer.stop();
                 }, 7000);
             },
             error: function(err) {
@@ -730,7 +737,8 @@ Slots.prototype = {
                         //     SlotsSnds.win.currentTime = 0;
                         //     SlotsSnds.win.play();
                         // } catch (err) {};
-                        player.playWin();
+                        // player.playWin();
+                        winPlayer.play();
 
                     } else {
                         //显示未中奖信息
@@ -805,45 +813,59 @@ Slots.prototype = {
 
 
 // 初始化一个MuPlayer的实例。注意，我们默认使用了_mu全局命名空间。
-var player = new _mu.Player({
+var winPlayer = new _mu.Player({
     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
     baseDir: 'sounds/',
-    mode:'single',
+    mode:'list',
     singleton:false
 });
-var player2 = new _mu.Player({
+var backPlayer = new _mu.Player({
     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
     baseDir: 'sounds/',
-    mode:'single',
+    mode:'list',
+    singleton:false
+});
+var btnPlayer = new _mu.Player({
+    // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
+    baseDir: 'sounds/',
+    mode:'list',
     singleton:false
 });
 
-player.add('sounds/slots_win_fruit_00.mp3');
-player2.add('sounds/background.mp3');
-player.add('sounds/ui_Buttons.mp3');
+winPlayer.add('sounds/slots_win_fruit_00.mp3');
+backPlayer.add('sounds/background.mp3');
+btnPlayer.add('sounds/ui_Buttons.mp3');
 
-player.playWin = function() {
-    player.setCur('sounds/slots_win_fruit_00.mp3');
-    player.play();
-    setTimeout(function() {
-        player.stop();
-    }, 300);
-}
-player2.playBackground = function() {
-    player2.setCur('sounds/background.mp3');
-    player2.play();
-    setTimeout(function() {
-        player2.stop();
-    }, 7000);
-}
+// winPlayer.on('next',function(){
+//     this.stop();
+// });
 
-player.playBtn = function() {
-    player.setCur('sounds/ui_Buttons.mp3');
-    player.play();
-    setTimeout(function() {
-        player.stop();
-    }, 100);
-}
+// btnPlayer.on('player:next',function(){
+//     btnPlayer.stop();
+// });
+
+// player.playWin = function() {
+//     player.setCur('sounds/slots_win_fruit_00.mp3');
+//     player.play();
+//     setTimeout(function() {
+//         player.stop();
+//     }, 300);
+// }
+// player2.playBackground = function() {
+//     player2.setCur('sounds/background.mp3');
+//     player2.play();
+//     setTimeout(function() {
+//         player2.stop();
+//     }, 7000);
+// }
+
+// player.playBtn = function() {
+//     player.setCur('sounds/ui_Buttons.mp3');
+//     player.play();
+//     setTimeout(function() {
+//         player.stop();
+//     }, 100);
+// }
 
 //invoke our game
 $(function() {
