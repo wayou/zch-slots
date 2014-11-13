@@ -89,7 +89,8 @@ img.slots-body {
 .slots-btn {
     position: relative;
     color: #FCED3A;
-    width: 15%;
+    /*width: 15%;*/
+    width:30%;
     margin: 5px;
     display: inline-block;
     text-align: center;
@@ -99,8 +100,11 @@ img.slots-body {
 }
 .lotery-ctn {
     position: absolute;
-    top: 3px;
-    width: 100%;
+top: 20%;
+width: 40%;
+font-size: 1.4em;
+padding-left: 3px;
+text-align: center;
 }
 #totalBet, .yellow {
     color: #FCED3A;
@@ -212,7 +216,8 @@ img.slots-body {
 .lotery-result-info{
     position: absolute;
     right: 5px;
-    top:25px;
+    /*top:25px;*/
+    top:90px;
 }
 .first-info,.lotery-result-info{
     /*display: none;*/
@@ -222,9 +227,11 @@ img.slots-body {
 }
 
 .lotery-result-info span.first-info{
-    color: #E7E900;
+    color: red;
 }
 .lotery-result-info span.round-result-info{
-    color: #F05048;
+    color: red;
 }
-
+#betLine{
+    left:33%;
+}
