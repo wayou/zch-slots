@@ -196,7 +196,9 @@ Slots.prototype = {
                 // } catch (err) {};
 
                 // player.playBtn();
+                // if(ios){
                 btnPlayer.play();
+                // }
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
                     alert('金钱不够哦~明天再来吧');
@@ -216,7 +218,9 @@ Slots.prototype = {
                     // } catch (err) {};
 
                     // player2.playBackground();
+                    if(ios){
                     backPlayer.play();
+                    }
 
                     that.spin(that);
                 } else {
@@ -237,11 +241,13 @@ Slots.prototype = {
 
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 // player.playBtn()
+                if(ios){
                 btnPlayer.play();
+                }
 
                 var $cntHolder = $('#betPerLineCnt'),
                     originalCnt = +$cntHolder.text();
-                if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)) {
+                if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)&&$cntHolder.text()<981) {
                     originalCnt += 10;
                 }
                 $cntHolder.text(originalCnt);
@@ -254,7 +260,9 @@ Slots.prototype = {
         this.$betLineBtn.on('tap click', function() {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 // player.playBtn()
+                if(ios){
                 btnPlayer.play();
+                }
                 
                 var $cntHolder = $('#linesCnt'),
                     originalCnt = +$cntHolder.text();
@@ -582,7 +590,7 @@ Slots.prototype = {
                             // if (res2.points != '0') {
                             //     $('#firstInfo').text('积分:' + res2.points);
                             // }
-                            $('#firstInfo').text('彩金:' + res2.winnings);
+                            $('#firstInfo').text('喜中彩金￥' + res2.winnings);
 
                             // if (res2.winnings != '0') {
                             //     $('#firstInfo').text('彩金:' + res2.winnings);
@@ -738,7 +746,9 @@ Slots.prototype = {
                         //     SlotsSnds.win.play();
                         // } catch (err) {};
                         // player.playWin();
+                        if(ios){
                         winPlayer.play();
+                        }
 
                     } else {
                         //显示未中奖信息
@@ -866,6 +876,8 @@ btnPlayer.add('sounds/ui_Buttons.mp3');
 //         player.stop();
 //     }, 100);
 // }
+
+var ios=navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPhone") > 0;
 
 //invoke our game
 $(function() {
