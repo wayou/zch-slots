@@ -197,7 +197,8 @@ Slots.prototype = {
 
                 // player.playBtn();
                 // if(ios){
-                btnPlayer.play();
+                btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                // btnPlayer.play();
                 // }
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
@@ -218,8 +219,9 @@ Slots.prototype = {
                     // } catch (err) {};
 
                     // player2.playBackground();
-                    if(ios){
-                    backPlayer.play();
+                    if (ios) {
+                        backPlayer.setUrl('sounds/background.mp3').play();
+                        // backPlayer.play();
                     }
 
                     that.spin(that);
@@ -237,17 +239,19 @@ Slots.prototype = {
         //     }
         // }, false);
 
-        this.$mkBetBtn.on('tap click', function() {
+        this.$mkBetBtn.on('click', function() {
 
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 // player.playBtn()
-                if(ios){
-                btnPlayer.play();
+                if (ios) {
+                    btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                    // btnPlayer.reset();
+                    // btnPlayer.play();
                 }
 
                 var $cntHolder = $('#betPerLineCnt'),
                     originalCnt = +$cntHolder.text();
-                if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth)&&$cntHolder.text()<981) {
+                if (((originalCnt + 10) * (+$('#linesCnt').text()) < that.user.wealth) && $cntHolder.text() < 981) {
                     originalCnt += 10;
                 }
                 $cntHolder.text(originalCnt);
@@ -257,13 +261,15 @@ Slots.prototype = {
             }
 
         });
-        this.$betLineBtn.on('tap click', function() {
+        this.$betLineBtn.on('click', function() {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 // player.playBtn()
-                if(ios){
-                btnPlayer.play();
+                if (ios) {
+                    btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                    // btnPlayer.reset();
+                    // btnPlayer.play();
                 }
-                
+
                 var $cntHolder = $('#linesCnt'),
                     originalCnt = +$cntHolder.text();
                 if (originalCnt < 9 && ((originalCnt + 1) * (+$('#betPerLineCnt').text()) < that.user.wealth)) {
@@ -521,7 +527,6 @@ Slots.prototype = {
 
 
 
-
     },
     getQueryString: function() {
         //helper function to get query parameters from url
@@ -733,7 +738,7 @@ Slots.prototype = {
                         if (entry.game.firstWin == 1) {
                             $('.first-info').show();
                             entry.game.firstWin = 0;
-                        }else{
+                        } else {
                             $('#roundResultInfo1').show();
                         }
                         setTimeout(function() {
@@ -747,8 +752,9 @@ Slots.prototype = {
                         //     SlotsSnds.win.play();
                         // } catch (err) {};
                         // player.playWin();
-                        if(ios){
-                        winPlayer.play();
+                        if (ios) {
+                            winPlayer.setUrl('sounds/slots_win_fruit_00.mp3').play();
+                            // winPlayer.play();
                         }
 
                     } else {
@@ -827,25 +833,28 @@ Slots.prototype = {
 var winPlayer = new _mu.Player({
     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
     baseDir: 'sounds/',
-    mode:'list',
-    singleton:false
+    mode: 'list',
+    singleton: false
 });
 var backPlayer = new _mu.Player({
     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
     baseDir: 'sounds/',
-    mode:'list',
-    singleton:false
+    mode: 'list',
+    singleton: false
 });
 var btnPlayer = new _mu.Player({
     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
     baseDir: 'sounds/',
-    mode:'list',
-    singleton:false
+    mode: 'list',
+    singleton: false
 });
 
 winPlayer.add('sounds/slots_win_fruit_00.mp3');
 backPlayer.add('sounds/background.mp3');
 btnPlayer.add('sounds/ui_Buttons.mp3');
+// winPlayer.setUrl('sounds/slots_win_fruit_00.mp3');
+// backPlayer.setUrl('sounds/background.mp3');
+// btnPlayer.setUrl('sounds/ui_Buttons.mp3');
 
 // winPlayer.on('next',function(){
 //     this.stop();
@@ -878,7 +887,7 @@ btnPlayer.add('sounds/ui_Buttons.mp3');
 //     }, 100);
 // }
 
-var ios=navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPhone") > 0;
+var ios = navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf("iPhone") > 0;
 
 //invoke our game
 $(function() {
