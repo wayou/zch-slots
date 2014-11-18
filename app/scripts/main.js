@@ -730,10 +730,11 @@ Slots.prototype = {
                         entry.GAME_STATUS = 3;
                         $('#winScore').text('$' + entry.user.winBet);
                         //显示中奖信息
-                        $('#roundResultInfo1').show();
                         if (entry.game.firstWin == 1) {
                             $('.first-info').show();
                             entry.game.firstWin = 0;
+                        }else{
+                            $('#roundResultInfo1').show();
                         }
                         setTimeout(function() {
                             $('#roundResultInfo1').hide();

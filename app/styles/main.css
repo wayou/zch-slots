@@ -217,7 +217,8 @@ text-align: center;
     position: absolute;
     right: 5px;
     /*top:25px;*/
-    top:90px;
+    /*top:90px;*/
+    bottom:0px;
 }
 .first-info,.lotery-result-info{
     /*display: none;*/
