@@ -196,10 +196,10 @@ Slots.prototype = {
                 // } catch (err) {};
 
                 // player.playBtn();
-                // if(ios){
-                btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
-                // btnPlayer.play();
-                // }
+                if(ios){
+                // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                btnPlayer.play();
+                }
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
                     alert('金钱不够哦~明天再来吧');
@@ -220,8 +220,8 @@ Slots.prototype = {
 
                     // player2.playBackground();
                     if (ios) {
-                        backPlayer.setUrl('sounds/background.mp3').play();
-                        // backPlayer.play();
+                        // backPlayer.setUrl('sounds/background.mp3').play();
+                        backPlayer.play();
                     }
 
                     that.spin(that);
@@ -244,9 +244,9 @@ Slots.prototype = {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 // player.playBtn()
                 if (ios) {
-                    btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                    // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
                     // btnPlayer.reset();
-                    // btnPlayer.play();
+                    btnPlayer.play();
                 }
 
                 var $cntHolder = $('#betPerLineCnt'),
@@ -265,9 +265,9 @@ Slots.prototype = {
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 // player.playBtn()
                 if (ios) {
-                    btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                    // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
                     // btnPlayer.reset();
-                    // btnPlayer.play();
+                    btnPlayer.play();
                 }
 
                 var $cntHolder = $('#linesCnt'),
@@ -753,8 +753,8 @@ Slots.prototype = {
                         // } catch (err) {};
                         // player.playWin();
                         if (ios) {
-                            winPlayer.setUrl('sounds/slots_win_fruit_00.mp3').play();
-                            // winPlayer.play();
+                            // winPlayer.setUrl('sounds/slots_win_fruit_00.mp3').play();
+                            winPlayer.play();
                         }
 
                     } else {
