@@ -55,6 +55,19 @@
 
 }());
 
+
+
+var player = new _mu.Player({
+    engines: [{
+        constructor: 'AudioCore'
+    }]
+});
+var btnSnd = 'sounds/ui_Buttons.mp3';
+// var btnSnd = 'http://wayou.github.io/zch-slots/sounds/ui_Buttons.mp3';
+var backSnd = 'sounds/background.mp3';
+var winSnd = 'sounds/slots_win_fruit_00.mp3';
+
+
 //the main slot class
 var Slots = function() {
     this.WINDOW_WIDTH = window.innerWidth;
@@ -196,9 +209,10 @@ Slots.prototype = {
                 // } catch (err) {};
 
                 // player.playBtn();
-                if(ios){
-                // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
-                btnPlayer.play();
+                if (ios) {
+                    // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                    // btnPlayer.play();
+                    player.setUrl(btnSnd).play();
                 }
 
                 if (that.user.wealth < (that.game.bet * that.game.lineCnt)) {
@@ -221,7 +235,8 @@ Slots.prototype = {
                     // player2.playBackground();
                     if (ios) {
                         // backPlayer.setUrl('sounds/background.mp3').play();
-                        backPlayer.play();
+                        // backPlayer.play();
+                        player.setUrl(backSnd).play();
                     }
 
                     that.spin(that);
@@ -246,7 +261,8 @@ Slots.prototype = {
                 if (ios) {
                     // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
                     // btnPlayer.reset();
-                    btnPlayer.play();
+                    // btnPlayer.play();
+                    player.setUrl(btnSnd).play();
                 }
 
                 var $cntHolder = $('#betPerLineCnt'),
@@ -267,7 +283,8 @@ Slots.prototype = {
                 if (ios) {
                     // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
                     // btnPlayer.reset();
-                    btnPlayer.play();
+                    // btnPlayer.play();
+                    player.setUrl(btnSnd).play();
                 }
 
                 var $cntHolder = $('#linesCnt'),
@@ -616,7 +633,8 @@ Slots.prototype = {
                     entry.layout = res.wheelTable; //中奖数据
                     entry.linesInfo = res.linesInfo; //每条线中奖情况
                     console.log(entry.linesInfo, entry.layout);
-                    backPlayer.stop();
+                    // backPlayer.stop();
+                    player.stop();
                 }, 7000);
             },
             error: function(err) {
@@ -754,7 +772,8 @@ Slots.prototype = {
                         // player.playWin();
                         if (ios) {
                             // winPlayer.setUrl('sounds/slots_win_fruit_00.mp3').play();
-                            winPlayer.play();
+                            // winPlayer.play();
+                            player.setUrl(winSnd).play();
                         }
 
                     } else {
@@ -830,28 +849,31 @@ Slots.prototype = {
 
 
 // 初始化一个MuPlayer的实例。注意，我们默认使用了_mu全局命名空间。
-var winPlayer = new _mu.Player({
-    // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
-    baseDir: 'sounds/',
-    mode: 'list',
-    singleton: false
-});
-var backPlayer = new _mu.Player({
-    // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
-    baseDir: 'sounds/',
-    mode: 'list',
-    singleton: false
-});
-var btnPlayer = new _mu.Player({
-    // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
-    baseDir: 'sounds/',
-    mode: 'list',
-    singleton: false
-});
+// var winPlayer = new _mu.Player({
+//     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
+//     baseDir: 'sounds/',
+//     mode: 'list',
+//     singleton: false
+// });
+// var backPlayer = new _mu.Player({
+//     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
+//     baseDir: 'sounds/',
+//     mode: 'list',
+//     singleton: false
+// });
+// var btnPlayer = new _mu.Player({
+//     // baseDir是必填初始化参数，指向刚才签出的MuPlayer静态资源目录
+//     baseDir: 'sounds/',
+//     mode: 'list',
+//     singleton: false
+// });
 
-winPlayer.add('sounds/slots_win_fruit_00.mp3');
-backPlayer.add('sounds/background.mp3');
-btnPlayer.add('sounds/ui_Buttons.mp3');
+// winPlayer.add('sounds/slots_win_fruit_00.mp3');
+// backPlayer.add('sounds/background.mp3');
+// btnPlayer.add('sounds/ui_Buttons.mp3');
+
+
+
 // winPlayer.setUrl('sounds/slots_win_fruit_00.mp3');
 // backPlayer.setUrl('sounds/background.mp3');
 // btnPlayer.setUrl('sounds/ui_Buttons.mp3');
