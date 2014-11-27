@@ -199,7 +199,7 @@ Slots.prototype = {
         this.run(that);
 
         // listen the spin button 
-        this.$spinBtn.on('tap click', function() {
+        this.$spinBtn.on('click', function() {
 
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
                 // try {
@@ -257,13 +257,7 @@ Slots.prototype = {
         this.$mkBetBtn.on('click', function() {
 
             if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
-                // player.playBtn()
-                if (ios) {
-                    // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
-                    // btnPlayer.reset();
-                    // btnPlayer.play();
-                    player.setUrl(btnSnd).play();
-                }
+                
 
                 var $cntHolder = $('#betPerLineCnt'),
                     originalCnt = +$cntHolder.text();
@@ -276,16 +270,18 @@ Slots.prototype = {
                 // $('#wealth').text(that.user.wealth - originalCnt * (+$('#linesCnt').text()));
             }
 
-        });
-        this.$betLineBtn.on('click', function() {
-            if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
-                // player.playBtn()
+            // player.playBtn()
                 if (ios) {
                     // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
                     // btnPlayer.reset();
                     // btnPlayer.play();
                     player.setUrl(btnSnd).play();
                 }
+
+        });
+        this.$betLineBtn.on('click', function() {
+            if (that.GAME_STATUS == 0 || that.GAME_STATUS == 3) {
+               
 
                 var $cntHolder = $('#linesCnt'),
                     originalCnt = +$cntHolder.text();
@@ -299,6 +295,14 @@ Slots.prototype = {
                 that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
                 // $('#wealth').text(that.user.wealth - originalCnt * (+$('#betPerLineCnt').text()));
             }
+
+             // player.playBtn()
+                if (ios) {
+                    // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
+                    // btnPlayer.reset();
+                    // btnPlayer.play();
+                    player.setUrl(btnSnd).play();
+                }
         });
 
         //play sound when button clicked
