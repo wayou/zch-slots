@@ -917,6 +917,7 @@ var ios = navigator.userAgent.indexOf("iPad") > 0 || navigator.userAgent.indexOf
 
 //invoke our game
 $(function() {
+    Origami.fastclick(document.body);
     //in order to get the right device size, we wrap all code into settimout scope
     setTimeout(function() {
         $('.main-wrapper').height(window.innerHeight);
