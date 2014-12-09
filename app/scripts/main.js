@@ -268,15 +268,17 @@ Slots.prototype = {
                 that.game.bet = originalCnt;
                 that.$totalBet.text(originalCnt * (+$('#linesCnt').text()));
                 // $('#wealth').text(that.user.wealth - originalCnt * (+$('#linesCnt').text()));
-            }
-
-            // player.playBtn()
+                
+                // player.playBtn()
                 if (ios) {
                     // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
                     // btnPlayer.reset();
                     // btnPlayer.play();
                     player.setUrl(btnSnd).play();
-                }
+                } 
+            }
+
+            
 
         });
         this.$betLineBtn.on('click', function() {
@@ -294,15 +296,15 @@ Slots.prototype = {
                 $cntHolder.text(originalCnt);
                 that.$totalBet.text(originalCnt * (+$('#betPerLineCnt').text()));
                 // $('#wealth').text(that.user.wealth - originalCnt * (+$('#betPerLineCnt').text()));
-            }
-
-             // player.playBtn()
+                
+                // player.playBtn()
                 if (ios) {
                     // btnPlayer.setUrl('sounds/ui_Buttons.mp3').play();
                     // btnPlayer.reset();
                     // btnPlayer.play();
                     player.setUrl(btnSnd).play();
                 }
+            }
         });
 
         //play sound when button clicked
