@@ -331,10 +331,11 @@ Slots.prototype = {
         //排行榜
         $('#rankBoard').on('click', function() {
             $.ajax({
-                url: 'http://54.223.144.172:18090/sgac/forwardList.action',
+                url: 'http://54.223.144.172:18070/sgac/forwardList.action',
                 data: {
                     playerId: that.user.playerId,
                     usercode: that.user.userId,
+                    tokenValue: that.user.tokenValue,
                     mid: 1020,
                     gameId: 90031,
                     type: 1,
@@ -418,14 +419,16 @@ Slots.prototype = {
 
         //when this works remove the default values 
         entry.user.userId = params.usercode || '20141016205157252083';
+        entry.user.tokenValue = params.tokenValue || '';
         // entry.user.username = params.username || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         // entry.user.nickname = params.nickname || 'ohwWZjn0TEp-6OkN92gCDJYO6dVg';
         // entry.user.headimgurl = params.headimgurl || 'images/default_avatar.jpg';
         $.ajax({
-            url: 'http://54.223.144.172:18090/sgac/transit.action',
+            url: 'http://54.223.144.172:18070/sgac/transit.action',
             data: {
                 action: 'userinfo',
-                usercode: entry.user.userId
+                usercode: entry.user.userId,
+                tokenValue: entry.user.tokenValue
             },
             dataType: 'json',
             success: function(zchres) {
@@ -438,11 +441,12 @@ Slots.prototype = {
 
                 //login
                 $.ajax({
-                    url: 'http://54.223.144.172:18090/sgac/thirdPartyLogin.action',
+                    url: 'http://54.223.144.172:18070/sgac/thirdPartyLogin.action',
                     data: {
                         userName: entry.user.nickname,
                         userId: entry.user.userId,
-                        usercode: entry.user.userId
+                        usercode: entry.user.userId,
+                        tokenValue: entry.user.tokenValue
                     },
                     dataType: 'json',
                     success: function(res) {
@@ -452,10 +456,11 @@ Slots.prototype = {
                         //get inital wealth info from server
                         // unlock
                         $.ajax({
-                            url: 'http://54.223.144.172:18090/sgac/forwardList.action',
+                            url: 'http://54.223.144.172:18070/sgac/forwardList.action',
                             data: {
                                 gameId: 90031,
                                 usercode: entry.user.userId,
+                                tokenValue: entry.user.tokenValue,
                                 playerId: entry.user.playerId,
                                 roomId: 1,
                                 msgid: 20050,
@@ -501,7 +506,7 @@ Slots.prototype = {
 
         // //login
         // $.ajax({
-        //     url: 'http://54.223.143.253:18090/sgac/thirdPartyLogin.action',
+        //     url: 'http://54.223.143.253:18070/sgac/thirdPartyLogin.action',
         //     data: {
         //         userName: entry.user.username,
         //         userId: entry.user.userId,
@@ -515,7 +520,7 @@ Slots.prototype = {
         //         //get inital wealth info from server
         //         // unlock
         //         $.ajax({
-        //             url: 'http://54.223.143.253:18090/sgac/forwardList.action',
+        //             url: 'http://54.223.143.253:18070/sgac/forwardList.action',
         //             data: {
         //                 gameId: 90031,
         //                 usercode: entry.user.userId,
@@ -584,10 +589,11 @@ Slots.prototype = {
         //unlock
         //send the bet info the server and start the animation while waiting the result from the server
         $.ajax({
-            url: 'http://54.223.144.172:18090/sgac/forwardList.action',
+            url: 'http://54.223.144.172:18070/sgac/forwardList.action',
             data: {
                 name: entry.user.nickname,
                 usercode: entry.user.userId,
+                tokenValue: entry.user.tokenValue,
                 playerId: entry.user.playerId,
                 lines: $('#linesCnt').text(),
                 betPerLine: $('#betPerLineCnt').text(),
@@ -603,10 +609,11 @@ Slots.prototype = {
                 if (res.firstWin == 1) {
                     entry.game.firstWin = 1;
                     $.ajax({
-                        url: 'http://54.223.144.172:18090/sgac/transit.action',
+                        url: 'http://54.223.144.172:18070/sgac/transit.action',
                         data: {
                             action: 'playresult',
                             usercode: entry.user.userId,
+                            tokenValue: entry.user.tokenValue,
                             gametime: 0,
                             coins: res.win,
                             exp: 0,
