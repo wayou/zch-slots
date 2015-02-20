@@ -1,2 +1,2 @@
 
-a slot machine
+a slot machine with 9 lines
